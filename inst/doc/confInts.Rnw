@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Exponential background CML parameter estimate confidence intervals}
+\documentclass{article}
+\begin{document}
+\end{document}
+

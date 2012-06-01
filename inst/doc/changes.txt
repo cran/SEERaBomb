@@ -1,0 +1,11 @@
+This package aims to make SEER and A-bomb data analyses more readily reproducible.
+
+Version 0.01.1     First Draft containing mkSEER, getFields and pickFields 5/27/2012
+                   Blood 2012 Figures 4, 5a, 5bc, and 6 as R functions with help.     
+                   Fig S4 (cleaned) + Landaw's Dingli code -> scripts in papers folder.  5/28/2012
+                   Wrote help and demo files                                   5/29-30/2012
+                   Set up separate repository so installation works without submission to CRAN via 
+install.packages(c("LaF","RSQLite","bbmle","SEERaBomb"),repos=c("http://cran.cwru.edu/","http://epbi-radivot.cwru.edu/"))   
+                   and set up Rnw stubs to get links to static pdfs from "vignettes" of the main help page  5/31/12
+                   Update epbi-radivot.case.edu website for SEERaBomb + test install on ubuntu. Fix all caps 
+                   on HEMA87.DAT needed to work on case sensitive linux.                   6/1/12

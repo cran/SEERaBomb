@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Nagasaki-Hiroshima CML city differences}
+\documentclass{article}
+\begin{document}
+\end{document}
+

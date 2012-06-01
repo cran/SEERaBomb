@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Links to the SEER and A-bomb data}
+\documentclass{article}
+\begin{document}
+\end{document}
+

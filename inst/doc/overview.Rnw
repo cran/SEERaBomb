@@ -1,0 +1,5 @@
+%\VignetteIndexEntry{Overview of the R package SEERaBomb}
+\documentclass{article}
+\begin{document}
+\end{document}
+
