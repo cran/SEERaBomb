@@ -35,6 +35,7 @@ library(SEERaBomb)
 (df=getFields())
 (df=pickFields(df))
 mkSEER(df,dataset="yr1992_2009")
+
 }
 }
 \keyword{IO}
