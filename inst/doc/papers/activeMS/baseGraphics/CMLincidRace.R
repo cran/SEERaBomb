@@ -1,6 +1,6 @@
-# Figure 4 of current MS. CML incidence by race for 2000-2009
+# Figure 4 of current MS. CML incidence by race for 2000-2010
 require(bbmle) 
-load("/data/SEER/yr2000_2009/pops.RData") # this loads in pops
+load("/data/SEER/00/pops.RData") # this loads in pops
 pyf=pym=vector(3,mode="list"); 
 for (i in 0:18) { for (r in 1:2) {
 		pym[[r]][i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(poprace==r)]))
@@ -15,9 +15,9 @@ nLL<-function(c0,k,x) with(x,{mn=exp(c0+k*(age-55))*py
 				-sum(stats::dpois(cases, mn, log=TRUE))})
 
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-graphics.off();windows(width=12,height=5)
-par(mfrow=c(1,3),mar=c(4.7,0,0,0),oma=c(0,7.1,4,0),lwd=3,cex.lab=2.8,cex.axis=2.5,cex.main=2.8)
-load("/data/SEER/yr2000_2009/lymyleuk.RData") # this loads in DF
+graphics.off();windows(width=12,height=5,xpos=-150)
+par(mfrow=c(1,3),mar=c(4.7,0,0,0),oma=c(0,7.1,4,0.2),lwd=3,cex.lab=2.8,cex.axis=2.5,cex.main=2.8)
+load("/data/SEER/00/lymyleuk.RData") # this loads in DF
 for (i in 1:3) {
 	if (i==3) d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$race>2)&(DF$race<98),] else 
 		d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$race==i),] 
@@ -48,5 +48,5 @@ for (i in 1:3) {
 					sprintf("(%s, %s)",format(CIF[2,2], digits=2),format(CIF[2,3], digits=2))),
 			text.col=c("blue","red"),bty="n",cex=2)
 }
-title("SEER CML Incidence 2000-2009",cex=3,outer=T)
+title("CML Incidence in SEER 2000-2010",cex=3,outer=T)
 

@@ -4,19 +4,19 @@ if (0) {  # switch this to 1 (i.e. run this chunk) if you never ran it before
 	library(SEERaBomb)
 	(df=getFields())
 	(df=pickFields(df))
-	mkSEER(df,dataset="yr2000_2009",SQL=TRUE)  # SQL=F is OK here too but SQL=T covers the SQL.R demo as well
+	mkSEER(df,dataset="00",SQL=TRUE)  # SQL=F is OK here too but SQL=T covers the SQL.R demo as well
 }
 
 
 rm(list=ls(all=TRUE))
 seerHome="/data/SEER"
-load(file.path(seerHome,"yr2000_2009/pops.RData")) # this loads in pops
+load(file.path(seerHome,"00/pops.RData")) # this loads in pops
 pym=NULL;pyf=NULL
 for (i in 0:18) 
 {   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)]))
 	pyf[i+1]=with(pops,sum(population[(popsex==2)&(popage==i)])) }
 
-load(file.path(seerHome,"yr2000_2009/lymyleuk.RData")) # this loads in DF
+load(file.path(seerHome,"00/lymyleuk.RData")) # this loads in DF
 d=DF[(DF$histo2==9863)&(DF$numprims==1),] # paper used SEER 1973-2008
 m=hist(d$agerec[d$sex==1],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 f=hist(d$agerec[d$sex==2],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts

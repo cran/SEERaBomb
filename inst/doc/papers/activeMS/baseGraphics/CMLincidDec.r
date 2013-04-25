@@ -1,7 +1,7 @@
 rm(list=ls(all=TRUE))
-FIGS2=FALSE  # in this case Fig S3 is produced
-FIGS2=TRUE   # make Fig S2
-load("/data/SEER/yr1973_2009/pops.RData") # this loads in pops
+FIGS2=FALSE  # use 9863
+FIGS2=TRUE   # use 205.1
+load("/data/SEER/73/pops.RData") # this loads in pops
 pops1=subset(pops,popyear<1985)
 pops2=subset(pops,(popyear>=1985)&(popyear<1997))
 pops3=subset(pops,popyear>=1997)
@@ -17,7 +17,7 @@ getSexPY<-function(pops) {pym=NULL;pyf=NULL
 (py2=getSexPY(pops2))
 (py3=getSexPY(pops3))
 
-load("/data/SEER/yr1973_2009/lymyleuk.RData") # this loads in DF
+load("/data/SEER/73/lymyleuk.RData") # this loads in DF
 if (FIGS2) ndat=DF[(DF$ICD9==2051)&(DF$numprims==1),] else ndat=DF[(DF$histo3==9863)&(DF$numprims==1),] 
 ndat1=subset(ndat,yrdx<1985)
 ndat2=subset(ndat,(yrdx>=1985)&(yrdx<1997))
@@ -46,7 +46,7 @@ ssolf=optim(p0,fexp,method="L-BFGS-B",control=list(maxit=400),dat=list(agex=age,
 print(km3<-ssolm$par["k"]); print(kf3<-ssolf$par["k"])  
 
 graphics.off()
-windows(height=5,width=12)
+windows(height=5,width=12,xpos=-150)
 par(mfrow=c(1,2),mar=c(4.7,6.2,0.8,1),lwd=3,cex.lab=2,cex.axis=2,cex.main=1.3)
 plot(age,mincid1<-m1/py1$m,log="y",type='b',xlab="Age",pch=1,col='blue',ylab="",yaxt="n",ylim=c(0.9e-7,1.5e-4),cex=1.3)
 lines(age,mincid2<-m2/py2$m,type='b',col='red',pch=2,cex=1.3)
@@ -55,7 +55,7 @@ axis(side=2,las=1, at=c(1e-7,1e-6,1e-5,1e-4),labels=expression(.1,1,10,10^2))
 mtext(expression(paste("Cases per ",10^6," PY")),side=2,line=3.7,cex=2)
 mtext("Males",side=3,line=-1.8,cex=2,adj=0.05)
 legend(25,1.6e-6,c(paste("1973-1984   k =",format(km1,digits=2)), paste("1985-1996   k =",format(km2,digits=2)),
-      paste("1997-2009   k =",format(km3,digits=2))), col=c("blue","red","black"),pch=1:3,bty="n",cex=1.5)
+      paste("1997-2010   k =",format(km3,digits=2))), col=c("blue","red","black"),pch=1:3,bty="n",cex=1.5)
 
 plot(age,fincid1<-f1/py1$f,log="y",type='b',xlab="Age",pch=1,cex=1.3,col='blue',ylab="",yaxt="n",ylim=c(.9e-7,1.5e-4)  )
 lines(age,fincid2<-f2/py2$f,type='b',col='red',pch=2,cex=1.3)  
@@ -64,4 +64,4 @@ mtext("Females",side=3,line=-1.8,cex=2,adj=0.05)
 axis(side=2,las=1, at=c(1e-7,1e-6,1e-5,1e-4),labels=expression(.1,1,10,10^2))
 mtext(expression(paste("Cases per ",10^6," PY")),side=2,line=3.5,cex=2)
 legend(25,1.6e-6,c(paste("1973-1984   k =",format(kf1,digits=2)), paste("1985-1996   k =",format(kf2,digits=2)),
-      paste("1997-2009   k =",format(kf3,digits=2))), col=c("blue","red","black"),pch=1:3,bty="n",cex=1.5)
+      paste("1997-2010   k =",format(kf3,digits=2))), col=c("blue","red","black"),pch=1:3,bty="n",cex=1.5)

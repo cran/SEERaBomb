@@ -1,4 +1,4 @@
-load("/data/SEER/yr2000_2009/pops.RData") # this loads in pops
+load("/data/SEER/00/pops.RData") # this loads in pops
 pyf=pym=vector(3,mode="list"); 
 for (i in 0:18) { for (r in 1:2) {
 		pym[[r]][i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(poprace==r)]))
@@ -6,7 +6,7 @@ for (i in 0:18) { for (r in 1:2) {
 	pym[[3]][i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(poprace>2)]))
 	pyf[[3]][i+1]=with(pops,sum(population[(popsex==2)&(popage==i)&(poprace>2)])) }
 
-load("/data/SEER/yr2000_2009/lymyleuk.RData") # this loads in DF
+load("/data/SEER/00/lymyleuk.RData") # this loads in DF
 casesf=casesm=vector(3,mode="list"); 
 for (i in 1:3) {
 	if (i==3) d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$race>2)&(DF$race<98),] else 

@@ -10,8 +10,8 @@
 }
 \details{CML is defined here using ICD-O2 histological code 9863. Subsequent to our Blood publication we deduced
  that this code includes CMML (chronic myelomonocytic leukemia). The impact of this is that 
- the true CML aging rate is lower than produced by this function; correct rates based on the 2000-2009 data set
- are produced by \file{CMLincid.R} in \file{papers/activeMS}.  
+ the true CML aging rate is lower than produced by this function; correct rates 
+ are produced in \file{CMLincid.R} in \file{papers/activeMS}.  
  }
 
 

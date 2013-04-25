@@ -1,6 +1,6 @@
 # This reproduces Fig S4 in  Radivoyevitch et al Blood 119, 4363-4371 (2012)
 rm(list=ls(all=TRUE))
-load("/data/seer/yr1973_2009/pops.RData") # this loads in pops
+load("/data/seer/73/pops.RData") # this loads in pops
 pym=NULL;pyf=NULL
 for (i in 0:18) 
 {   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(popyear<2009)]))
@@ -11,10 +11,10 @@ fexp<-function(p,dat,fitEXP)	{	c0=p[1];k=p[2];
 	with(dat,{mn=exp(c0+k*mylog(age,fitEXP))*py 
 				-sum(cases*log(mn) - mn)})	}
 
-load("/data/SEER/yr1973_2009/lymyleuk.RData") # this loads in DF
+load("/data/SEER/73/lymyleuk.RData") # this loads in DF
 morphCodes=c(CML=9863,APL=9866)
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-graphics.off(); windows(width=8,height=8)
+graphics.off(); windows(width=8,height=8,xpos=-150)
 par(mfrow=c(2,2),mar=c(4.7,0,2.3,0),oma=c(0,6,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 for (fitEXP in c(TRUE,FALSE))
 	for (i in names(morphCodes)) {
@@ -30,8 +30,10 @@ for (fitEXP in c(TRUE,FALSE))
 		datam=data.frame(age,cases=m,py=pym,incid=m/pym)[6:19,] 
 		dataf=data.frame(age,cases=f,py=pyf,incid=f/pyf)[6:19,]
 		p0=c(c0=-10,k=ifelse(fitEXP,.04,1))
-		ssolm=optim(p0,fexp,method="L-BFGS-B",dat=datam,fitEXP=fitEXP)
-		ssolf=optim(p0,fexp,method="L-BFGS-B",dat=dataf,fitEXP=fitEXP)
+# 		ssolm=optim(p0,fexp,method="L-BFGS-B",dat=datam,fitEXP=fitEXP)
+# 		ssolf=optim(p0,fexp,method="L-BFGS-B",dat=dataf,fitEXP=fitEXP)
+		ssolm=optim(p0,fexp,dat=datam,fitEXP=fitEXP)
+		ssolf=optim(p0,fexp,dat=dataf,fitEXP=fitEXP)
 		ym=exp(ssolm$par["c0"]+ssolm$par["k"]*mylog(age[6:19],fitEXP))
 		yf=exp(ssolf$par["c0"]+ssolf$par["k"]*mylog(age[6:19],fitEXP))
 		lines(age[6:19],ym,col="blue"); lines(age[6:19],yf,col="red")

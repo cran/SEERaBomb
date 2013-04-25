@@ -8,16 +8,16 @@ fexp<-function(p,dat)	{	c0=p[1];k=p[2];
 	with(dat,{mn=exp(c0+k*age)*py
 				-sum(cases*log(mn) - mn)})	}
 
-load("/data/SEER/yr2000_2009/pops.RData") # this loads in pops
+load("/data/SEER/00/pops.RData") # this loads in pops
 pym=NULL;pyf=NULL
 for (i in 0:18) 
 {   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)]))
 	pyf[i+1]=with(pops,sum(population[(popsex==2)&(popage==i)])) }
 
-load("/data/SEER/yr2000_2009/lymyleuk.RData") # this loads in DF
+load("/data/SEER/00/lymyleuk.RData") # this loads in DF
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
 graphics.off()
-windows(width=13,height=7)
+windows(width=13,height=7,xpos=-300)
 par(mfrow=c(2,3),mar=c(4.7,6,3.3,1),oma=c(0,0,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 for (i in 1:6) {
 	if (i==1) {Indx=(DF$histo2==9863);tit="CML 9863 O2 "} 
@@ -42,14 +42,14 @@ for (i in 1:6) {
 	lines(age[6:19],ym,col="blue")
 	lines(age[6:19],yf,col="red")
 	mtext(expression(paste("Cases per ",10^6," Person-Years")),side=2,line=3.3,cex=1.5)
-	title(paste(tit,"2000-2009"))
+	title(paste(tit,"2000-2010"))
 	legend(-3,1.7e-4,
       c(sprintf("%3s Males; M/F=%3.2f; k = %5.3f",sum(m),mean(datam$incid/dataf$incid),ssolm$par["k"]),
 		sprintf("%3s Females; k = %5.3f",sum(f),ssolf$par["k"])),
 		col=c("blue","red"),pch=1:2,text.col=c("blue","red"),bty="n",cex=1.7)
 }
 
-windows(width=13,height=7)
+windows(width=13,height=7,xpos=-300, ypos=-50)
 par(mfrow=c(2,3),mar=c(4.7,6,3.3,1),oma=c(0,0,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 for (i in 1:6) {
 	if (i==1) {Indx=(DF$histo3==9875);tit="CML 9875 O3 (BA-)"} 
@@ -74,7 +74,7 @@ for (i in 1:6) {
 	lines(age[6:19],ym,col="blue")
 	lines(age[6:19],yf,col="red")
 	mtext(expression(paste("Cases per ",10^6," Person-Years")),side=2,line=3.3,cex=1.5)
-	title(paste(tit,"2000-2009"))
+	title(paste(tit,"2000-2010"))
 	legend(-3,1.7e-4,
 			c(sprintf("%3s Males; M/F=%3.2f; k = %5.3f",sum(m),mean(datam$incid/dataf$incid,na.rm=T),ssolm$par["k"]),
 					sprintf("%3s Females; k = %5.3f",sum(f),ssolf$par["k"])),

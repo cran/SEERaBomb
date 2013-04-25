@@ -16,12 +16,19 @@ getFields<-function(seerHome="/data/SEER"){
 	sas=SAS=data.frame(start,width,names,desc,stringsAsFactors=F)
 	sas$names=tolower(gsub("_","",sas$names)); sas$names=gsub("v$","",sas$names)  # clean names a little
 	# these are ones I disliked enough to change. Mostly I'm taking the SAS file names of fields.
-	sas$names[12]="modx" ;	sas$names[13]="yrdx"
-	sas$names[90]="ICD9" ;	sas$names[91]="ICD10"
-	sas$names[99]="cssO3";	sas$desc[99]="Collaborative Stage (CS) Schema v0203"  # CS was not defined!
-	sas$names[112]="COD" ; 	sas$desc[36]="Collaborative Stage (CS) Tumor Size"
-#	tmp=cbind(SAS[,1:3],sas[,3:4]); colnames(tmp)[3:4]<-c("SAS","SEERaBomb");tmp
-#    library(hwriter); hwrite(tmp, 'fieldNames.html', row.bgcolor='#ffdc98')#=file in doc directory 
+ 	sas[which(sas$names=="datemo"),"names"]="modx" 
+	sas$names[which(sas$names=="dateyr")]="yrdx" 
+	sas$names[which(sas$names=="icdoto9")]="ICD9" 
+	sas$names[which(sas$names=="icdot10")]="ICD10" 
+	sas$names[which(sas$names=="icd5dig")]="COD" 
+	sas$names[which(sas$names=="srvtimemon")]="surv" 
+	# to spell out Collaborative Stage = CS, change a desc
+  sas$desc[which(sas$names=="cssize")]="Collaborative Stage (CS) Tumor Size"
+
+###  uncomment and run this when field names and/or positions change
+#   setwd("inst/doc")
+# 	tmp=cbind(SAS[,1:3],sas[,3:4]); colnames(tmp)[3:4]<-c("SAS","SEERaBomb");tmp
+#   library(hwriter); hwrite(tmp, 'fieldNames.html', row.bgcolor='#ffdc98')#=file in doc directory 
 	sas
 }
 

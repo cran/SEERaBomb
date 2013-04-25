@@ -11,7 +11,7 @@
   input data frame \code{sas}.
 The default is \code{picks=c("casenum","reg","race",} 
 \code{"sex","agedx","yrbrth","seqnum","yrdx","histo2","histo3","radiatn",}
-\code{"agerec","ICD9","histrec","cssO3","numprims","survtm","COD")}
+\code{"agerec","ICD9","histrec","numprims","COD","surv")}
   }
 }
 \details{R binaries become too large if all of the fields are selected. \code{SEERaBomb} is faster than SEER*Stat 
@@ -34,7 +34,6 @@ requires an understanding of the contents of \file{seerdic.pdf} in the \file{inc
 library(SEERaBomb)
 (df=getFields())
 (df=pickFields(df))
-mkSEER(df,dataset="yr1992_2009")
 
 }
 }

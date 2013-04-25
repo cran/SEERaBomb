@@ -23,9 +23,7 @@ starting positions, widths, short names, and expansions thereof.}
 \dontrun{
 library(SEERaBomb)
 (df=getFields())
-head(df) 
-df$names
-
+head(df,20)
 }
 }
 \keyword{IO}

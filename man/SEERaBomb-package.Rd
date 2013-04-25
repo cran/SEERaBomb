@@ -3,10 +3,12 @@
 \docType{package}
 \title{ SEER data setup and examples including analyses of A-Bomb Data }
 \description{
-This package strives to make SEER data more accessible from R. It provides functions that can be combined to 
-convert fixed-width format
-SEER ASCII text data files into R binaries. It also provides examples of the use of these binaries and examples that use
-the Japanese A-bomb survivor data.    
+This package strives to make SEER data more accessible from R. 
+It provides functions that can be combined to convert fixed-width format
+SEER ASCII text data files into R binaries. It also provides examples of the use of these binaries and examples that use the Japanese A-bomb survivor data. 
+This package works only with the latest SEER release, now of April 24, 2013.
+SEER data field positions and names can change over the years, and a goal of 
+SEERaBomb is to buffer/protect R scripts from such changes.
 }
 
 \details{
@@ -21,8 +23,8 @@ LazyData: \tab yes\cr
 URL: \tab \url{http://epbi-radivot.cwru.edu/SEERaBomb/SEERaBomb.html}\cr
 }
 
-\if{html}{\figure{seerAbombFig.png}}
-\if{latex}{\figure{seerAbombFig.png}{options: width=5in}}
+\if{html}{\figure{SEERaBomb.png}}
+\if{latex}{\figure{SEERaBomb.png}{options: width=5in}}
 }
 
 

@@ -1,13 +1,13 @@
-# Figure 1 of current MS. Differs from Blood Fig 5a in using 2000-2009, not 1973-2008
+# Figure 1 of current MS. Differs from Blood Fig 5a in using 2000-2010, not 1973-2008
 seerHome="/data/SEER"
-load(file.path(seerHome,"yr2000_2009/pops.RData")) # this loads in pops
+load(file.path(seerHome,"00/pops.RData")) # this loads in pops
 pym=NULL;pyf=NULL
 for (i in 0:18) 
 {   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)]))
 	pyf[i+1]=with(pops,sum(population[(popsex==2)&(popage==i)])) }
 
-load(file.path(seerHome,"yr2000_2009/lymyleuk.RData")) # this loads in DF
-d=DF[(DF$histo3==9945)&(DF$numprims==1),] # paper used SEER 1973-2008
+load(file.path(seerHome,"00/lymyleuk.RData")) # this loads in DF
+d=DF[(DF$histo3==9945)&(DF$numprims==1),] 
 m=hist(d$agerec[d$sex==1],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 f=hist(d$agerec[d$sex==2],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 age=c(0.5,3,seq(7.5,87.5,5))
@@ -15,7 +15,7 @@ datam=data.frame(age,cases=m,py=pym,incid=m/pym)[6:19,]
 dataf=data.frame(age,cases=f,py=pyf,incid=f/pyf)[6:19,]
 
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-windows(width=6,height=6)
+windows(width=6,height=6,xpos=-150)
 par(mfrow=c(1,1),mar=c(4.7,6,3.3,1),oma=c(0,0,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 with(datam,plot(age,incid,log="y",xlab="Age",col='blue',pch=1,
 				ylab="",cex=2,yaxt="n",ylim=c(0.5e-7,1.5e-4),xlim=c(22,87)))
@@ -32,7 +32,7 @@ axis(side=2,las=1, at=c(1e-7,1e-6,1e-5,1e-4),labels=expression(.1,1,10,10^2))
 lines(age[6:19],ym,col="blue")
 lines(age[6:19],yf,col="red")
 mtext(expression(paste("Cases per ",10^6," Person-Years")),side=2,line=3.5,cex=2)
-title("U.S. CMML Incidence 2000-2009")
+title("CMML Incidence: SEER 2000-2010")
 legend(19,2.8e-4,c(paste("Males      k =",format(ssolm$par["k"], digits=4)),
 				paste( "Females  k =",format(ssolf$par["k"],digits=4))),
 		col=c("blue","red"),pch=1:2,text.col=c("blue","red"),bty="n",cex=1.4)

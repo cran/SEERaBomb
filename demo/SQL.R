@@ -4,12 +4,12 @@ if (0) {  # switch this to 1 (i.e. run this chunk) if you never ran it before
 	library(SEERaBomb)
 	(df=getFields())
 	(df=pickFields(df))
-	mkSEER(df,dataset="yr2000_2009",SQL=TRUE)
+	mkSEER(df,dataset="00",SQL=TRUE)
 }
 
 library(RSQLite)
 m=dbDriver("SQLite")
-con=dbConnect(m,dbname="/data/SEER/yr2000_2009/all.db")
+con=dbConnect(m,dbname="/data/SEER/00/all.db")
 dbListTables(con)
 dbListFields(con,"pops")
 dbListFields(con,"lymyleuk")
@@ -28,8 +28,9 @@ age=c(0.5,3,seq(7.5,87.5,5))
 datam=data.frame(age,cases=m,py=pym,incid=m/pym)[6:19,] 
 dataf=data.frame(age,cases=f,py=pyf,incid=f/pyf)[6:19,]
 
+# graphics.off()
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-windows(width=6,height=6)
+windows(xpos=-150,width=6,height=6)
 par(mfrow=c(1,1),mar=c(4.7,6,3.3,1),oma=c(0,0,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 with(datam,plot(age,incid,log="y",xlab="Age",col='blue',pch=1,
 				ylab="",cex=2,yaxt="n",ylim=c(1e-6,1e-4),xlim=c(22,87)))
@@ -46,7 +47,7 @@ axis(side=2,las=1, at=c(1e-6,1e-5,1e-4),labels=expression(1,10,10^2))
 lines(age[6:19],ym,col="blue")
 lines(age[6:19],yf,col="red")
 mtext(expression(paste("Cases per ",10^6," Person-Years")),side=2,line=3.5,cex=2)
-title("U.S. CML Incidence 2000-2009")
+title("U.S. CML Incidence 2000-2010")
 legend(20,1.3e-4,c(paste("Males      k =",format(ssolm$par["k"], digits=2)),
 				paste( "Females  k =",format(ssolf$par["k"],digits=2))),
 		col=c("blue","red"),pch=1:2,text.col=c("blue","red"),bty="n",cex=1.7)

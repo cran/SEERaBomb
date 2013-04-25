@@ -1,5 +1,5 @@
 filecanc=c('breast','digothr','malegen','femgen','other','respir','colrect','lymyleuk','urinary')
-load("/data/SEER/yr2000_2009/pops.RData") # this loads in pops
+load("/data/SEER/00/pops.RData") # this loads in pops
 pyf=pym=vector(3,mode="list"); 
 for (i in 0:18) { for (r in 1:2) {
 		pym[[r]][i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(poprace==r)]))
@@ -10,7 +10,7 @@ if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
 graphics.off();
 for (k in c(1:9))
 {
-	load(paste("/data/SEER/yr2000_2009/",filecanc[k],".RData",sep="")) # this loads in DF
+	load(paste("/data/SEER/00/",filecanc[k],".RData",sep="")) # this loads in DF
 	DF=DF[!is.na(DF$ICD9),]  # get rid of missing ICD9 entries
 	if (k==1) { canc=c('Breast'); code=list(c(1741,1748)) } 
 	if (k==2) {canc=c('Esophogeal','Stomach','Liver','Pancreatic'); 
@@ -26,7 +26,7 @@ for (k in c(1:9))
 	if (k==9) { canc=c("Bladder","Kidney"); code=list(c(1880,1889),c(1890,1891))}
 	for (j in 1:length(code))
 	{	
-		windows(width=12,height=5)
+		windows(width=12,height=5,xpos=-450)
 		par(mfrow=c(1,3),mar=c(4.7,0,2,0),oma=c(0,7.1,4,0),lwd=3,cex.lab=2.8,cex.axis=2.5,cex.main=2.8)
 		Indx=(DF$ICD9>=code[[j]][1])&(DF$ICD9<=code[[j]][2])&(DF$numprims==1) 
 		incdf=incdm=vector(3,mode="list"); 
@@ -62,7 +62,7 @@ for (k in c(1:9))
 			mtext(paste(sum(di$cases),c("whites","blacks","others")[i]),side=3,line=.5,cex=1.5,adj=0.5)
 			legend("bottomright",c("Males","Females"),col=c("blue","red"),pch=1:2,text.col=c("blue","red"),bty="n",cex=2)
 		} # i loop over races
-		title(paste("SEER",canc[j],"Cancer Incidence 2000-2009"),cex=3,outer=T)
+		title(paste("SEER",canc[j],"Cancer Incidence 2000-2010"),cex=3,outer=T)
 	} # j loop over cancers within file
 }  # k loop on k over files
 

@@ -1,13 +1,13 @@
 blood2012fig5a<-function(seerHome="/data/SEER") {
 	#seerHome="/data/SEER"
 	pops=DF=NULL # to get rid of NOTES on package check about "no visible binding" 
-	load(file.path(seerHome,"yr1973_2009/pops.RData")) # this loads in pops
+	load(file.path(seerHome,"73/pops.RData")) # this loads in pops
 	pym=NULL;pyf=NULL
 	for (i in 0:18) 
 	{   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(popyear<2009)]))
 		pyf[i+1]=with(pops,sum(population[(popsex==2)&(popage==i)&(popyear<2009)])) }
 
-	load(file.path(seerHome,"yr1973_2009/lymyleuk.RData")) # this loads in DF
+	load(file.path(seerHome,"73/lymyleuk.RData")) # this loads in DF
 	d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$yrdx<2009),] # paper used SEER 1973-2008
 	m=hist(d$agerec[d$sex==1],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 	f=hist(d$agerec[d$sex==2],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
