@@ -1,6 +1,6 @@
 Package: SEERaBomb
 Title: SEER Setup and Use with A-Bomb Data
-Version: 2013.4.0
+Version: 2013.4.1
 Date: 2013-04-25
 Author: Tomas Radivoyevitch
 Description: This package contains codes that setup SEER (Surveillance,
@@ -15,7 +15,7 @@ Suggests: bbmle
 License: GPL-2
 LazyData: yes
 URL: http://epbi-radivot.cwru.edu/SEERaBomb/SEERaBomb.html
-Packaged: 2013-04-26 19:27:33 UTC; radivot
+Packaged: 2013-04-26 20:56:55 UTC; radivot
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2013-04-26 21:52:16
+Date/Publication: 2013-04-27 08:19:09

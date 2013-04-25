@@ -23,8 +23,8 @@ LazyData: \tab yes\cr
 URL: \tab \url{http://epbi-radivot.cwru.edu/SEERaBomb/SEERaBomb.html}\cr
 }
 
-\if{html}{\figure{SEERaBomb.png}}
-\if{latex}{\figure{SEERaBomb.png}{options: width=5in}}
+\if{html}{\figure{SEERaBombFig.png}}
+\if{latex}{\figure{SEERaBombFig.png}{options: width=5in}}
 }
 
 

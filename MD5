@@ -1,6 +1,6 @@
-110e10b3e80a045180700f361a31082e *DESCRIPTION
+0c99b12c494bf1256cff84dd92f93dbd *DESCRIPTION
 997fee9fa75f1c7d1bf26657aa100c57 *NAMESPACE
-5b268a396ad853a8fc9f4aecf7f62770 *NEWS
+c932474e706f32feae18338e5b073be6 *NEWS
 aa21a12e06aa2c9a9d07d6136e1fdbbc *R/blood2012fig4.R
 80e44bffacd84339abce09889c7d8303 *R/blood2012fig5a.R
 d45cbccce95fac5d1ffe4a9250c876e3 *R/blood2012fig5bc.R
@@ -41,13 +41,13 @@ a62c8aa84d237a159d81baf02c3b6bfc *inst/doc/papers/activeMS/baseGraphics/CMMLinci
 b974c713731da5c8cee13ff5baec3206 *inst/doc/papers/activeMS/baseGraphics/racePvalues.R
 e624e8621fa39df8dc3d0521c0d2d93c *inst/doc/papers/blood2012/dingliCMLFINAL3.R
 9df08288768aff0196cfa3cb9246b2a7 *inst/doc/papers/blood2012/vIncidAPLCML.r
-f3857da2d20f661160331393e275fea3 *man/SEERaBomb-package.Rd
+2e751595c93e63307ed145521eed5103 *man/SEERaBomb-package.Rd
 cc82eddd37b11dad6e39d23768ec3527 *man/Sigurdson.Rd
 9d1720e1b473706db952b38f3583ea41 *man/blood2012fig4.Rd
 8e9e92ff6df41fbebd0fc6ab8d65a943 *man/blood2012fig5a.Rd
 ba97ea23ca9b6c09eb0aa82be000fe41 *man/blood2012fig5bc.Rd
 3ff88679cc9ce662d6afea9e8b1c320c *man/blood2012fig6.Rd
-5c79efdb4ae9fcfef4b54bd7fb510ab3 *man/figures/SEERaBomb.png
+7df41a1f682da4918d4172548ca4573d *man/figures/SEERaBombFig.png
 8a68b98413103b239b159d1558d5fdf9 *man/getFields.Rd
 c032e7eb75f41e879c8184b8dce76e17 *man/mkSEER.Rd
 9f746f5921f256ddf3a983667c609c33 *man/pickFields.Rd
