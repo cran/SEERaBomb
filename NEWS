@@ -1,3 +1,28 @@
+CHANGES IN VERSION 2013.4.3
+------------------------
+
+NEW FEATURES
+
+    o added mkAbomb() to convert RERF file lsshempy.csv into a binary and SQLite database
+
+    o added mkHema87() to convert RERF file HEMA87.DAT into a binary with column names
+
+    o sq vs ad lung incidence and survival added to doc/courses
+
+    o JCO 2013 survival plots added to doc/papers/JCO2013
+
+    o activeMS is now doc/papers/radiatEnvironBiophys2013
+
+SIGNIFICANT USER-LEVEL CHANGES
+
+    o old demos are now examples in doc/courses
+
+Notes
+
+    o vignettes are not possible since SEER and Abomb data must be signed off on. 
+
+
+
 CHANGES IN VERSION 2013.4.1
 ------------------------
 

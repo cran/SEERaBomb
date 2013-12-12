@@ -32,7 +32,6 @@ URL: \tab \url{http://epbi-radivot.cwru.edu/SEERaBomb/SEERaBomb.html}\cr
         Cancer Biology Program under U54CA149233-029689. }
 
 \author{ Tom Radivoyevitch (\email{txr24@case.edu}) }
-\seealso{\code{\link{getFields},\link{pickFields},\link{mkSEER},
-\link{blood2012fig4},\link{blood2012fig5a},\link{blood2012fig5bc},\link{blood2012fig6}} }
+\seealso{\code{\link{getFields},\link{pickFields},\link{mkSEER}} }
 
 \keyword{package}

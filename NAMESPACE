@@ -1,1 +1,1 @@
-export(mkSEER,getFields,pickFields,blood2012fig4,blood2012fig5a,blood2012fig5bc,blood2012fig6)
+export(mkSEER,getFields,pickFields,mkAbomb,mkHema87)

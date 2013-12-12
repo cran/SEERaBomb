@@ -1,4 +1,4 @@
-# nagaCML.R (see documentation of this demo under vignettes)
+# nagaCML.R (see documentation in nagaCML.pdf)
 # NOTICE: you must have the A-bomb file HEMA87.DAT to run this, see gettingData.pdf in doc. 
 # If you have it but not in /data/abomb, you must update read.table below. 
 

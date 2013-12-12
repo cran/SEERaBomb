@@ -31,7 +31,7 @@ pop$dec= cut(pop$popyear,breaks=c(1972,1984,1996,2010),labels=c("73to84","85to96
 head(pop,20)
 
 d=dbGetQuery(con, 
-       "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+    "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
 head(d)
 (d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))) 
 d$decade= cut(d$yrdx,breaks=c(1972,1984,1996,2011),labels=c("73to84","85to96","97to10"))
@@ -71,8 +71,8 @@ p=p+mythem
          legend.title = element_text(size = rel(1.4)) ,
   legend.text = element_text(size = rel(1.4))  ) )  
 
-ggsave(p,file="/users/radivot/igv/trends.wmf")
-#ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/trends.wmf")
+# ggsave(p,file="/users/radivot/igv/trends.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/trends.png")
 
 #######################################################################
 ## CMML Incidence: Figure 3
@@ -117,8 +117,9 @@ library(ggplot2)
 (p=p+annotate("text",x=35,y=70, hjust=0, label = paste("y ~ exp(C+k*age)  C~sex"),size=8 )   )  
 (p=p+annotate("text",x=35,y=40,hjust=0,label=lab, size=8))
 
-ggsave(p,file="/users/radivot/igv/CMML.wmf")
-# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/CMML.wmf")
+# ggsave(p,file="/users/radivot/igv/CMML.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/CMML.png")
+
 
 
 ###########################################################################################
@@ -131,6 +132,9 @@ pops$poprace[pops$poprace>2]=3
 (pop<-ddply(pops, .(popage,popsex,poprace), summarise,py=sum(population)))
 head(pop)
 d=dbGetQuery(con, 
+# ICDO3 CML codes 9875 = bcr-abl+ and 9876 =bcr-abl neg CML are not in full use yet, i.e.
+# many ICD-O3 CML codes are still 9863 carried over from ICD-O2
+# "SELECT * from lymyleuk where histo3=9876 and seqnum<2 and race<98 and agerec>5 and agerec<19")
 "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and race<98 and agerec>5 and agerec<19")
 d$race[d$race>2]=3
 head(d)
@@ -317,8 +321,8 @@ require(grid) # to avoid "cannot find unit()"
 (p=p+geom_line(aes(y=EI))) 
 (p=p + geom_text(aes(label=Text), size=6,data=tdf, hjust=0))
 
-ggsave(p,file="/users/radivot/igv/race.wmf")
-# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/race.wmf") 
+# ggsave(p,file="/users/radivot/igv/race.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/race.png") 
 #####################   END Figure 4
 
 ######################   
@@ -338,6 +342,7 @@ head(pop,20)
 
 d=dbGetQuery(con, 
 "SELECT * from lymyleuk where race=1 and histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and ICD9=2051 and seqnum<2 and agerec>5 and agerec<19")
 head(d)
 d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))
 d$Years=cut(d$yrdx,breaks=c(1972,1977,1982,1987,1992,1999,2004,2011),labels=yearS)
@@ -376,7 +381,7 @@ dfk9=data.frame(years,k,kL,kU,Registries="SEER9")
 
 con=dbConnect(m,dbname=file.path(.seerHome,"00/all.db"))
 pop=dbGetQuery(con, 
-               "SELECT * from pops where poprace=1 and popyear>1999 and popage>5 and popage<19")
+"SELECT * from pops where poprace=1 and popyear>1999 and popage>5 and popage<19")
 pop<-ddply(pop, .(popage,popsex,popyear), summarise,py=sum(population))
 head(pop,20)
 yearS=c("00to01","02to03","04to05","06to07","08to10")
@@ -385,7 +390,8 @@ pop<-ddply(pop,.(popage,popsex,Years),summarise,py=sum(py))
 head(pop,20)
 
 d=dbGetQuery(con, 
-             "SELECT * from lymyleuk where race=1 and histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where race=1 and histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and ICD9=2051 and seqnum<2 and agerec>5 and agerec<19")
 d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))
 d$Years=cut(d$yrdx,breaks=c(1999,2001,2003,2005,2007,2011),labels=yearS)
 d<-ddply(d, .(agerec,sex,Years), summarise,cases=sum(cases))
@@ -430,7 +436,9 @@ pd <- position_dodge(1)
 (p=p+theme(legend.position = c(0.2, .2), 
            legend.title = element_text(size = rel(1.5)) ,
            legend.text = element_text(size = rel(1.5))  ) )  
-ggsave(p,file="/users/radivot/igv/ktrends.wmf")
+# ggsave(p,file="/users/radivot/igv/ktrends.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/ktrends.png")
+
 ###################### End Fig 5 on k trends
 
 
@@ -496,8 +504,8 @@ pf=waitf/sum(waitf)
 (p=p+annotate("text",x=25,y=9, hjust=0, label = lb1,size=9,parse=T) )
 (lb1=paste0("tau[f] == ",tauf,"*~Yrs"))
 (p=p+annotate("text",x=25,y=8, hjust=0, label = lb1,size=9,parse=T) )
-ggsave(p,file="/users/radivot/igv/IR2CML.wmf")
-# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/IR2CML.wmf")
+# ggsave(p,file="/users/radivot/igv/IR2CML.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/IR2CML.png")
 
 # This next block calculates the 95% CI of the difference in waiting times
 rdiscrete <- function(n, probs,values) {
@@ -540,7 +548,7 @@ points(x=c(0,Tp),y=c(Rp,1),pch=1,cex=3,lwd=3)
 abline(h=1,v=0,lty=3)
 fT=function(R) Tp-log(R)/k
 Tx=7
-Rx=2.4
+Rx=2.5
 points(x=c(fT(Rx),Tx),y=c(Rx,fR(Tx)),pch="+",cex=3)
 # plot(1:20,pch=1:20)
 x=seq(fT(Rx),Tx,0.1)
@@ -593,8 +601,8 @@ library(ggplot2)
            axis.title.x = element_text(size = rel(2.3)),
            axis.text = element_text(size = rel(2.3)))  )
 
-ggsave(p,file="/users/radivot/igv/agex.wmf")
-# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/agex.wmf")
+# ggsave(p,file="/users/radivot/igv/agex.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/agex.png")
 
 # for b test bin up times since exposure in groups of two to make fewer parameters
 d$caln=cut(as.integer(d$calg),c(0,2,4,6,8,10),labels=c(7,12,20,30,40))
@@ -696,8 +704,8 @@ library(ggplot2)
            legend.title = element_text(size = rel(2)) ,
            legend.text = element_text(size = rel(2))  ) )  
 
-ggsave(p,file="/users/radivot/igv/AML.wmf")
-# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/CMML.wmf")
+# ggsave(p,file="/users/radivot/igv/AML.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/AML.png")
 
 
 
@@ -706,8 +714,10 @@ ggsave(p,file="/users/radivot/igv/AML.wmf")
 #############################
 # CML Incidence in SEER 2000-2009 (parallel lines) 
 ##############################
+con=dbConnect(m,dbname=file.path(.seerHome,"00/all.db"))
 d=dbGetQuery(con, 
-             "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where histo3=9876 and seqnum<2 and agerec>5 and agerec<19")
 (d<-ddply(d, .(agerec,sex), summarise,cases=length(agerec))) 
 pops=dbGetQuery(con, "SELECT * from pops where popyear>2000 and popage>5 and popage<19")
 (pop<-ddply(pops, .(popage,popsex), summarise,py=sum(population)))
@@ -760,7 +770,85 @@ mkCIT=function(v) sprintf("Tf = %3.1f (%3.1f, %3.1f)",v[1],v[2],v[3])
 (p=p+annotate("text",x=30,y=65,hjust=0,label=mkCIA(CIA["c.sexF",]), size=6 )   )  
 (p=p+annotate("text",x=30,y=47, hjust=0, label = paste("y ~ exp(c+k*(age-Tf))"),size=7)   )  
 (p=p+annotate("text",x=30,y=37,hjust=0, label=mkCIT(CIT["Tf.sexF",]), size=6))
-ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/CML.wmf")
+# ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/CML.wmf")
 
+###########################################################
+# This section explores CML ICD-O3 codes in whites as 9863, 9875 (ba+) and 9876 (ba-)
+con=dbConnect(m,dbname=file.path(.seerHome,"00/all.db"))
+pop=dbGetQuery(con, 
+     "SELECT * from pops where poprace=1 and popyear>1999 and popage>9 and popage<19")
+pop<-ddply(pop, .(popage,popsex,popyear), summarise,py=sum(population),.drop=F)
+head(pop,20)
+yearS=c("01to03","04to05","06to07","08to10")
+pop$Years=cut(pop$popyear,breaks=c(1999,2003,2005,2007,2011),labels=yearS)
+pop<-ddply(pop,.(popage,popsex,Years),summarise,py=sum(py),.drop=F)
+head(pop,20)
+dim(pop)
 
+d=dbGetQuery(con, 
+# "SELECT * from lymyleuk where race=1 and ICD9=2051 and
+#              seqnum<2 and agerec>9 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and histo2=9863 and
+#               seqnum<2 and agerec>9 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and 
+#              ((histo3=9863) or (histo3=9876) or (histo3=9875)) and
+#              seqnum<2 and agerec>9 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and 
+#              (histo3=9863 or histo3=9875) and
+#              seqnum<2 and agerec>9 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and histo3=9875 and
+# seqnum<2 and agerec>9 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and histo3=9945 and
+# seqnum<2 and agerec>9 and agerec<19")
+d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec),.drop=F)
+sum(d$cases)  #2970 icdo2 9863 cases is same as icdO3 9863+9875+9876
+# of the latter, 2425 are 9863, 507 are 9875 and only 38 are 9876  
+d$Years=cut(d$yrdx,breaks=c(1999,2003,2005,2007,2011),labels=yearS)
+d<-ddply(d, .(agerec,sex,Years), summarise,cases=sum(cases),.drop=F)
+head(cbind(d,pop)) # just to see that they match up
+d=cbind(d,py=pop[,"py"])
+head(d,15)
+d$Sex=factor(d$sex,labels=c("Male","Female"))
+age=c(0.5,3,seq(7.5,87.5,5))
+d$age=age[d$agerec+1]
+head(d,15)
+years=c(2002,2005,2007,2009)
+kic=0.05
+c=k=NULL
+cL=kL=NULL
+cU=kU=NULL
+for (Y in yearS) {
+  summary(mk<-mle2(cases~dpois(lambda=exp(c+k*(age-65))*py),
+                   parameters=list(c~sex),
+                   method="Nelder-Mead",
+                   start=list(c=-12,k=kic),data=subset(d,Years==Y))) 
+  k=c(k,coef(mk)[3])
+  c=c(c,coef(mk)[1])
+  CI=confint(mk)
+  (CIk=round(CI[3,],4))
+  (CIc=round(CI[1,],4))
+  kL=c(kL,CIk[1])
+  kU=c(kU,CIk[2])
+  cL=c(cL,CIc[1])
+  cU=c(cU,CIc[2])
+}
+data.frame(years,c,cL,cU)
+data.frame(years,k,kL,kU)
 
+# 9876 = ba neg
+# > data.frame(years,k,kL,kU)
+# years          k      kL     kU
+# 1  2002 0.04739624  0.0042 0.0918
+# 2  2005 0.11644800  0.0455 0.2098
+# 3  2007 0.06525722  0.0131 0.1207
+# 4  2009 0.04218057 -0.0077 0.0926
+
+# 9875 = ba + 
+# years           k      kL     kU
+# 1  2002 0.012260690 -0.0035 0.0276
+# 2  2005 0.009064363 -0.0086 0.0234
+# 3  2007 0.007569936 -0.0078 0.0245
+# 4  2009 0.004961402 -0.0077 0.0165
+
+# so bcr-abl negative CML's do have a larger k/aging rate constant, 
+# but since we used icdo2 9863, this cannot explain the ongoing drops in k

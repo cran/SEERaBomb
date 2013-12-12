@@ -1,4 +1,15 @@
-# confInts.R  (see documentation of this demo under vignettes)
+# confInts.R  
+# Exponential background CML parameter estimate confidence intervals
+
+# This script starts out by using optim() and an explicitly defined
+# log-likelihood function to fit exp(c0+k*age) to CML incidence for ages >20 
+# using Poisson regression.  It then shows that the same results are obtained by
+# either mle2() or by glm(), but slightly different results are obtained using 
+# the least squares functions nls() and lm().  This script also shows that when 
+# ages are centered about a median age of 55, the confidence interval of c0 (the
+# log-space intercept) is shortened more so than that of k (the log-space 
+# slope).
+
 # NOTICE: you must
 if (0) {  # switch this to 1 (i.e. run this chunk) if you never ran it before
 	library(SEERaBomb)
