@@ -8,7 +8,7 @@ fisher.test(X)
 
 
 
-.seerHome="/data/SEER" # Assume here that the SEER data is in /data/SEER. Change this if not. 
+.seerHome="~/data/SEER" # Assume here that the SEER data is in /data/SEER. Change this if not. 
 rm(list=ls()) # note: dot variables defined above persist through such cleanings
 library(RSQLite) # install.packages("RSQLite")
 m=dbDriver("SQLite")

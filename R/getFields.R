@@ -1,4 +1,4 @@
-getFields<-function(seerHome="/data/SEER"){
+getFields<-function(seerHome="~/data/SEER"){
 	sas=readLines(dir(pattern="*.sas",path=file.path(seerHome,"incidence"),full.names=TRUE)[1],warn=F)
 	sas=sas[-c(1:5)]
 	(sas=sas[nchar(sas)>15]) # remove trailing rows

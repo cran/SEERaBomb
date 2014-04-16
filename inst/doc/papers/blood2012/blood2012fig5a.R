@@ -1,4 +1,4 @@
-seerHome="/data/SEER"
+seerHome="~/data/SEER"
 pops=DF=NULL # to get rid of NOTES on package check about "no visible binding" 
 load(file.path(seerHome,"73/pops.RData")) # this loads in pops
 pym=NULL;pyf=NULL

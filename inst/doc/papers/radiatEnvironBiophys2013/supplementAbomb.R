@@ -1,10 +1,10 @@
 rm(list=ls()) 
 # The first step is to show that there are lower AIC EAR models than the CML ERR
 # and EAR models in: Hsu, W. L., Preston, ... and Mabuchi, K. The Incidence of
-# Leukemia, Lymphoma ... among Atomic Bomb Survivors: 1950–2001. Radiat. Res.
-# 179, 361–382 (2013). To use this script please place lsshempy.csv in
+# Leukemia, Lymphoma ... among Atomic Bomb Survivors: 1950-2001. Radiat. Res.
+# 179, 361-382 (2013). To use this script please place lsshempy.csv in
 # /data/abomb or change this line
-d<-read.csv("/data/abomb/lsshempy.csv",header=T)
+d<-read.csv("~/data/abomb/lsshempy.csv",header=T)
 head(d,2)
 d=d[d$mar_an>=0,] # take only those with known doses 
 sum(d$cml) # check to see that we have 75 cases of CML
@@ -359,7 +359,7 @@ sprintf("%s (%s, %s)",tauf-taum,delT[1],delT[2])
 
 
 
-ggsave(p,file="/users/radivot/downloads/sachs/IR2CML.wmf")
+# ggsave(p,file="/users/radivot/downloads/sachs/IR2CML.wmf")
 
 
 ### Figure 7: interpretations ##############

@@ -38,7 +38,7 @@ moran = function(regIni=399, cmlIni=1, period, timestep = 0.0025)
 ## the average amount of time for a replication/export is 1/400 of a year. 
 
 ## 'regIni' and 'cmlIni' may be changed, but the default is 399 healthy stem cells and 1 leukemic stem cell. 
-## The default 'timestep' is somewhat arbitrarily chosen to be 1/400 – 
+## The default 'timestep' is somewhat arbitrarily chosen to be 1/400 ? 
 
 ## This is a subroutine that is used in the main function 
 {

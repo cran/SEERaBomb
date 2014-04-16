@@ -6,7 +6,7 @@
 This package strives to make SEER data more accessible from R. 
 It provides functions that can be combined to convert fixed-width format
 SEER ASCII text data files into R binaries. It also provides examples of the use of these binaries and examples that use the Japanese A-bomb survivor data. 
-This package works only with the latest SEER release, now of April 24, 2013.
+This package works only with the latest SEER release, now of April 15, 2014.
 SEER data field positions and names can change over the years, and a goal of 
 SEERaBomb is to buffer/protect R scripts from such changes.
 }
@@ -29,9 +29,9 @@ URL: \tab \url{http://epbi-radivot.cwru.edu/SEERaBomb/SEERaBomb.html}\cr
 
 
 \note{ This work was supported by the National Cancer Institute and Tufts Integrative 
-        Cancer Biology Program under U54CA149233-029689. }
+        Cancer Biology Program under U54CA149233-029689. Maintenance is supported by the Cleveland Clinic Foundation.}
 
-\author{ Tom Radivoyevitch (\email{txr24@case.edu}) }
+\author{ Tom Radivoyevitch (\email{radivot@ccf.org}) }
 \seealso{\code{\link{getFields},\link{pickFields},\link{mkSEER}} }
 
 \keyword{package}

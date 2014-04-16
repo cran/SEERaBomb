@@ -2,13 +2,13 @@
 \alias{mkSEER}
 \title{ Make SEER data binaries }
 \description{ This function converts large SEER ASCII text data files into smaller R binaries.}
-\usage{mkSEER(df,seerHome="/data/SEER",
-            dataset=c("00","73","92"),SQL=FALSE)}
+\usage{mkSEER(df,seerHome="~/data/SEER",
+            dataset=c("00","73","92"),SQL=TRUE)}
 
 \arguments{
   \item{df}{ A data frame that was the output of \code{pickFields}. This determines which fields to transfer. }
   \item{seerHome}{ The directory that contains the SEER \file{population} and \file{incidence} directories.  This should be writable by the user.}
-  \item{dataset}{The SEER dataset to use, specified as a string of the last two digits of the starting year, i.e. \code{"73"} = 1973-2010 = SEER 9, \code{"92"}  = 1992-2010 = SEER 13, and \code{"00"} = 2000-2010 = SEER 18, where in SEER X, X is the number of SEER registries. This determines the subdirectory in \file{incidence} and \file{population} from which data is taken and is also the name of the subdirectory of \code{seerHome} to which the R data files will be written, e.g. \code{"00"} processes SEER18 data (collected since 2000) and places the binary results in /data/SEER/00.}
+  \item{dataset}{The SEER dataset to use, specified as a string of the last two digits of the starting year, i.e. \code{"73"} = 1973-2011 = SEER 9, \code{"92"}  = 1992-2011 = SEER 13, and \code{"00"} = 2000-2011 = SEER 18, where in SEER X, X is the number of SEER registries. This determines the subdirectory in \file{incidence} and \file{population} from which data is taken and is also the name of the subdirectory of \code{seerHome} to which the R data files will be written, e.g. \code{"00"} processes SEER18 data (collected since 2000) and places the binary results in /data/SEER/00.}
   \item{SQL}{TRUE if an SQLite database is to be created and populated with tables. The single file \file{all.db} produced in this case can be significantly larger than the sum of the \file{*.RData} files also produced. }           
 }
 
@@ -17,24 +17,23 @@ of SEER. \pkg{LaF} is fast, but it requires knowledge of all the widths of colum
 }
 \value{None. This function is called for its side-effects: it produces R binary data files.}
 
-\note{ This version of \pkg{SEERaBomb} works only with the SEER data release of April 2013.
+\note{ This version of \pkg{SEERaBomb} works only with the SEER data release of April 2014.
 Using the default field choices of \code{pickFields()},
-computing times range from ~10 seconds for 1992-2010 processing without SQLite database generation, to ~90 seconds for 1973-2010 processing with SQLite database generation.
+computing times range from ~10 seconds for 1992-2011 processing without SQLite database generation, to ~90 seconds for 1973-2011 processing with SQLite database generation.
 This work was supported by the National Cancer Institute and Tufts Integrative 
-Cancer Biology Program under U54CA149233-029689. }
-\author{ Tom Radivoyevitch (\email{txr24@case.edu}) }
+Cancer Biology Program under U54CA149233-029689. Maintenance is supported by the Cleveland Clinic Foundation. }
+\author{ Tom Radivoyevitch (\email{radivot@ccf.org}) }
 \seealso{\code{\link{SEERaBomb-package},\link{getFields},\link{pickFields}} }
 \examples{
 \dontrun{
 library(SEERaBomb)
 (df=getFields())
 (df=pickFields(df))
-mkSEER(df,dataset="92")  # fastest option
 # the following takes ~4 minutes, but may only need 
 # to be done roughly once per year, with each release.
-mkSEER(df,dataset="92",SQL=TRUE) 
-mkSEER(df,dataset="73",SQL=TRUE)
-mkSEER(df,dataset="00",SQL=TRUE)
+mkSEER(df,dataset="92") 
+mkSEER(df,dataset="73")
+mkSEER(df,dataset="00")
 }
 }
 \keyword{IO}

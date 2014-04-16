@@ -26,8 +26,8 @@ requires an understanding of the contents of \file{seerdic.pdf} in the \file{inc
 }
 
 \note{ This work was supported by the National Cancer Institute and Tufts Integrative 
-        Cancer Biology Program under U54CA149233-029689. }
-\author{Tom Radivoyevitch (txr24@case.edu)}
+        Cancer Biology Program under U54CA149233-029689. Maintenance is supported by the Cleveland Clinic Foundation.}
+\author{Tom Radivoyevitch (radivot@ccf.org)}
 \seealso{\code{\link{SEERaBomb-package}, \link{getFields}, \link{pickFields}, \link{mkSEER}} }
 \examples{
 \dontrun{

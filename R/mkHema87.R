@@ -1,5 +1,4 @@
-mkHema87<-function(AbombHome="/data/Abomb"){
-
+mkHema87<-function(AbombHome="~/data/Abomb"){
   cols87=c("city","sex","doseg","agexg","calg","kerma","upy","py","subjects",
          "age","agex","tsx","cal","sv","gam","neut",
            "lymphoma","NHL","leukemia","AML","ALL","CML","ATL","MM")      

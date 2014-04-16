@@ -1,4 +1,4 @@
-aBombHome="/data/abomb"
+aBombHome="~/data/abomb"
 load(file.path(aBombHome,"Hema87.RData"));
 names(d)
 d=d[d$py>0,] #remove two recs with zero py

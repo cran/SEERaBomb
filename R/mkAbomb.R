@@ -1,4 +1,4 @@
-mkAbomb<-function(AbombHome="/data/Abomb"){
+mkAbomb<-function(AbombHome="~/data/Abomb"){
   colNames = c(
     "city","sex","un4gy","distg","agexg","ageg","doseg",
     "calg","upy","py","subjects","gdist","agex","age","year",

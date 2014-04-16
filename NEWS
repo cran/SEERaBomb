@@ -1,3 +1,18 @@
+CHANGES IN VERSION 2014.4.1
+------------------------
+
+NEW FEATURES
+
+    o changed default seerHome directory to ~\data\SEER to no longer assume admin rights
+
+    o updated 2010 to 2011 in mkSEER and in several help pages to match April 15,2014 SEER release
+
+    o changed mkSEER SQL default to TRUE 
+
+    o added pops single ages (popsa) to binary files and all.db  
+
+
+
 CHANGES IN VERSION 2013.4.3
 ------------------------
 

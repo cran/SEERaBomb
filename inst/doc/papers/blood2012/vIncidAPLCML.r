@@ -1,6 +1,6 @@
 # This reproduces Fig S4 in  Radivoyevitch et al Blood 119, 4363-4371 (2012)
 rm(list=ls(all=TRUE))
-load("/data/seer/73/pops.RData") # this loads in pops
+load("~/data/seer/73/pops.RData") # this loads in pops
 pym=NULL;pyf=NULL
 for (i in 0:18) 
 {   pym[i+1]=with(pops,sum(population[(popsex==1)&(popage==i)&(popyear<2009)]))
@@ -11,7 +11,7 @@ fexp<-function(p,dat,fitEXP)	{	c0=p[1];k=p[2];
 	with(dat,{mn=exp(c0+k*mylog(age,fitEXP))*py 
 				-sum(cases*log(mn) - mn)})	}
 
-load("/data/SEER/73/lymyleuk.RData") # this loads in DF
+load("~/data/SEER/73/lymyleuk.RData") # this loads in DF
 morphCodes=c(CML=9863,APL=9866)
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
 graphics.off(); windows(width=8,height=8,xpos=-150)
