@@ -292,9 +292,15 @@ substring("(4.23",2)
 (ups=sapply(Lvls,function(x) as.numeric(substring(x[2],1,4))))
 (mids=round(apply(rbind(lows,ups),2,mean),2))
 (dfc=data.frame(mids,wait,waitL,waitU,Sex=gl(2,6,labels=c("Male","Female") ) ) )
+
+graphics.off()
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=7,height=6)
+
 library(ggplot2)
 pd <- position_dodge(1) 
-(p=ggplot(dfc, aes(x=mids, y=wait, shape=Sex,ymax=10)) + 
+(p=ggplot(dfc, aes(x=mids, y=wait, shape=Sex, col=Sex, ymax=10)) + 
    geom_point(size=6,position=pd) ) # + ylim(0, 10) ) # scale_y_log10(limits=c(1e-5,10)) 
 (p=p+labs(title="IR-to-CML Latency",x="Years since exposure",
           y=expression(paste("Cases per ",10^4," Person-Year-Sv") ) ) )    
@@ -326,12 +332,11 @@ pf=waitf/sum(waitf)
 (taum<-round(mids%*%pm,2))
 (tauf<-round(mids%*%pf,2))
 
-(p=p+annotate("text",x=25,y=10, hjust=0, label = paste("M/F =",MF),size=9) )
+(p=p+annotate("text",x=15,y=10, hjust=0, label = paste("M/F =",MF),size=9) )
 (lb1=paste0("tau[m] == ",taum,"*~Yrs"))
-(p=p+annotate("text",x=25,y=9, hjust=0, label = lb1,size=9,parse=T) )
+(p=p+annotate("text",x=15,y=9, hjust=0, label = lb1,size=9,parse=T) )
 (lb1=paste0("tau[f] == ",tauf,"*~Yrs"))
-(p=p+annotate("text",x=25,y=8, hjust=0, label = lb1,size=9,parse=T) )
-
+(p=p+annotate("text",x=15,y=8, hjust=0, label = lb1,size=9,parse=T) )
 # This next block calculates the 95% CI of the difference in waiting times
 rdiscrete <- function(n, probs,values) {
   cumprobs <- cumsum(probs)
@@ -349,22 +354,19 @@ summary(as.factor(y))
 (delT=quantile(x-y,c(0.025,0.975)))
 (lb1=paste0("Delta*tau == ",tauf-taum,"(",delT[1],", ",delT[2],")"))
 #(lb1=paste0("Delta*tau == ",tauf-taum,"~group(\"(\",",delT[1],",",delT[2],",\")\")")) # attempt with group() failed
-windows(height=7,width=8,xpos=-100,ypos=-100)  # set back to square
-(p=p+annotate("text",x=25,y=7, hjust=0, label = lb1,size=7,parse=T) ) #just show since can't add space before ( 
-
+# quartz(height=7,width=8)  # set back to square
+(p=p+annotate("text",x=15,y=7, hjust=0, label = lb1,size=7,parse=T) ) #just show since can't add space before ( 
 sprintf("%s (%s, %s)",tauf-taum,delT[1],delT[2])
-
-
-
-
-
-
-# ggsave(p,file="/users/radivot/downloads/sachs/IR2CML.wmf")
+# ggsave(p,file="~/IR2CML.eps")
 
 
 ### Figure 7: interpretations ##############
-graphics.off()
-windows(height=6,width=6,xpos=-100,ypos=-100) 
+# graphics.off()
+# quartz(height=6,width=6) 
+
+# setEPS()
+# postscript('~/concept.eps', height = 6, width = 6)
+
 k=0.025
 Tp=22.1
 Rp=1.73
@@ -408,15 +410,24 @@ text(-9,1.38,
      "interpretations\nconsistent with\ntime-since-\nexposure data\n(heavy line)",
      cex=1.4,font=1)
 arrows(x0=-2,y0=1.4,fT(1.4),y1=1.4,lwd=2,angle=20)
+# dev.off() 
+
 
 ###############################################33
 
 
 # Age at exposure: Figure 8
-windows(height=7,width=8,xpos=-100,ypos=-100)  
+graphics.off()
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=8,height=7)
+
 
 head(d)
 d$Dose<-cut(d$sv,c(-1,.02,1,100),labels=c("Low","Moderate","High"))
+d$Dose=factor(d$Dose,levels=c("High","Moderate","Low"))
+
+
 d$agexc<-cut(d$agex,c(0,20,40,180),labels=c("10","30","50"))
 d$Sex<-factor(d$s,labels=c("Male","Female"))
 head(d)
@@ -426,7 +437,7 @@ library(plyr)
 (d2=within(d2,{incid=1e5*cases/PY}))
 
 library(ggplot2)
-(p <- ggplot(d2,aes(x=agex,y=incid,shape=Dose,group=Dose))+geom_point(size=5) +geom_line()
+(p <- ggplot(d2,aes(x=agex,y=incid,shape=Dose,col=Dose,group=Dose))+geom_point(size=5) +geom_line()
  + labs(title="Hiroshima A-bomb Survivors",x="Age-at-exposure (PY-weighted)",
         y=expression(paste("CML Cases per ",10^5," Person-Years")))    
  + scale_y_log10(limits=c(.1,130)) +xlim(8,52) )
@@ -435,15 +446,15 @@ library(ggplot2)
 #   legend.position = "none", 
    legend.position = c(0.67, .85), 
            legend.title = element_text(size = rel(2)) ,
-           legend.text = element_text(size = rel(1.7))  ) )  
+           legend.text = element_text(size = rel(1.3))  ) )  
 
-(p=p+theme(plot.title = element_text(size = rel(2.5)),
+(p=p+theme(plot.title = element_text(size = rel(2)),
            strip.text = element_text(size = rel(2)),
-           axis.title.y = element_text(size = rel(2.5)),
-           axis.title.x = element_text(size = rel(2.3)),
-           axis.text = element_text(size = rel(2.3)))  )
+           axis.title.y = element_text(size = rel(1.7)),
+           axis.title.x = element_text(size = rel(1.7)),
+           axis.text = element_text(size = rel(2)))  )
 
-# ggsave(p,file="/users/radivot/igv/agex.wmf")
+# ggsave(p,file="~/agex.eps")
 # ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/agex.png")
 
 ########### make a similar plot for age, not agex. 
@@ -451,8 +462,10 @@ library(ggplot2)
 #This plot shows just how crazy the Hiroshima Females really are, i.e. it shows
 #that we should try to stay away from them.
 
-graphics.off()
-windows(height=7,width=8,xpos=-100,ypos=-100)  
+# graphics.off()
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=8,height=7)
 
 head(d)
 d$agec<-cut(d$age,c(0,30,60,180),labels=c("15","45","75"))

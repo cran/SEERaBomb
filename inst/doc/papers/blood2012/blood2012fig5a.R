@@ -7,7 +7,14 @@ for (i in 0:18)
     pyf[i+1]=with(pops,sum(population[(popsex==2)&(popage==i)&(popyear<2009)])) }
 
 load(file.path(seerHome,"73/lymyleuk.RData")) # this loads in DF
-d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$yrdx<2009),] # paper used SEER 1973-2008
+head(DF,2)
+levels(DF$cancer)
+table(DF$cancer)["CML"]
+table(DF$ICD9)["2051"] # 100 extra not accounted for
+table(DF$histo3)["9863"]+table(DF$histo3)["9875"]+table(DF$histo3)["9876"]+table(DF$histo3)["9945"]
+table(DF$histo3)["9863"]+table(DF$histo3)["9875"]+table(DF$histo3)["9876"]
+# d=DF[(DF$histo2==9863)&(DF$numprims==1)&(DF$yrdx<2009),] # paper used SEER 1973-2008
+d=DF[(DF$cancer=="CML")&(DF$numprims==1)&(DF$yrdx<2009),] # paper used SEER 1973-2008
 m=hist(d$agerec[d$sex==1],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 f=hist(d$agerec[d$sex==2],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 age=c(0.5,3,seq(7.5,87.5,5))
@@ -15,7 +22,8 @@ datam=data.frame(age,cases=m,py=pym,incid=m/pym)[6:19,]
 dataf=data.frame(age,cases=f,py=pyf,incid=f/pyf)[6:19,]
 
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-windows(width=6,height=6)
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(height=6,width=6)
 par(mfrow=c(1,1),mar=c(4.7,6,3.3,1),oma=c(0,0,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 with(datam,plot(age,incid,log="y",xlab="Age",col='blue',pch=1,
                 ylab="",cex=2,yaxt="n",ylim=c(1e-6,1e-4),xlim=c(22,87)))

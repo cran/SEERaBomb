@@ -1,18 +1,20 @@
 \name{mkAbomb}
 \alias{mkAbomb}
-\title{ Make Abomb data binaries }
-\description{ This function converts the Abomb data file lsshempy.csv into R binaries.}
+\title{ Make Abomb SQLite database}
+\description{ Converts Abomb files \file{lsshempy.csv} and \file{lssinc07.csv} 
+into tables \code{heme} and \code{solid}, 
+respectively, in SQLite database \file{abomb.db}.}
 \usage{mkAbomb(AbombHome="~/data/Abomb")}
 
 \arguments{
-  \item{AbombHome}{ The directory that contains the Abomb file \file{lsshempy.csv}.  This should be writable by the user.}
+  \item{AbombHome}{ Directory with Abomb files.  Should be writable by user.}
 }
 
-\details{This function makes both a binary data.frame file and an SQLite database.}
-\value{A dataframe that describes the column names. This function is however mainly called for its side-effects: it produces R binary data files.}
-\note{ This function works only with the Abomb data file lsshempy.csv released by RERF in 2013. }
+\details{Descriptions of column names are given 
+in \code{hemeDesc} and \code{solidDesc}.}
+\value{None. This function is called for its side-effect of producing an SQLite database file.}
 \author{ Tom Radivoyevitch (\email{radivot@ccf.org}) }
-\seealso{\code{\link{SEERaBomb-package},\link{mkSEER},\link{getFields},\link{pickFields}} }
+\seealso{\code{\link{SEERaBomb-package},\link{mkSEER},\link{mkSEERold}} }
 \examples{
 \dontrun{
 library(SEERaBomb)

@@ -12,13 +12,17 @@ library(plyr)
 library(bbmle)
 library(ggplot2)
 graphics.off()
-quartz(height=7,width=8) 
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=8,height=7)
 # windows(height=7,width=8,xpos=-100,ypos=-100) #need to control the device size to
                                     # make things work across computers/screen sizes
 # Note: Figure 1 was drawn using Adobe Illustrator so it is not reproduced here.
 ######################   
 # Code 9863 versus 205.1 trends over the decades: Figure 2
 con=dbConnect(m,dbname=file.path(.seerHome,"73/all.db"))
+# con=dbConnect(m,dbname=file.path(.seerHome,"mrgd/cancDef.db"))
+# dbListFields(con,"canc")
 #######################################################################
 dbListTables(con)
 dbListFields(con,"pops")
@@ -31,7 +35,8 @@ pop$dec= cut(pop$popyear,breaks=c(1972,1984,1996,2013),labels=c("73to84","85to96
 head(pop,20)
 
 d=dbGetQuery(con, 
-    "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+#      "SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+    "SELECT * from lymyleuk where cancer='CML' and seqnum<2 and agerec>5 and agerec<19")
 head(d)
 (d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))) 
 d$decade= cut(d$yrdx,breaks=c(1972,1984,1996,2013),labels=c("73to84","85to96","97to11"))
@@ -135,7 +140,8 @@ d=dbGetQuery(con,
 # ICDO3 CML codes 9875 = bcr-abl+ and 9876 =bcr-abl neg CML are not in full use yet, i.e.
 # many ICD-O3 CML codes are still 9863 carried over from ICD-O2
 # "SELECT * from lymyleuk where histo3=9876 and seqnum<2 and race<98 and agerec>5 and agerec<19")
-"SELECT * from lymyleuk where histo2=9863 and seqnum<2 and race<98 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where cancer='CML' and seqnum<2 and race<98 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where histo3=9863 and seqnum<2 and race<98 and agerec>5 and agerec<19")
 d$race[d$race>2]=3
 head(d)
 (ddply(d, .(agerec,sex,race), summarise,cases=length(agerec))) #only 5 of the 16s 
@@ -299,13 +305,15 @@ mkCases=function(n) sprintf("%d cases",n)
 
 graphics.off()
 # windows(height=6,width=12,xpos=-100,ypos=-100) #need to control the device size to
-quartz(height=6,width=12) 
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=12,height=6)
 library(ggplot2)
 require(grid) # to avoid "cannot find unit()"
-(p <- ggplot(d,aes(x=age,y=incid,shape=Sex)) + geom_point(size=5) 
+(p <- ggplot(d,aes(x=age,y=incid,col=Sex,shape=Sex)) + geom_point(size=7) 
  + labs(title="CML Incidence by Race, Sex and Age",x="Age",
         y=expression(paste("Cases per ",10^6," Person-Years")))    
- + scale_y_log10(limits=c(3,100)) +xlim(20,90) )
+ + scale_y_log10(limits=c(1,100)) +xlim(20,90) )
 (p=p + facet_grid(. ~ race))
 # (p=p+scale_shape_discrete(name = "") )
 
@@ -322,7 +330,7 @@ require(grid) # to avoid "cannot find unit()"
 (p=p+geom_line(aes(y=EI))) 
 (p=p + geom_text(aes(label=Text), size=6,data=tdf, hjust=0))
 
-# ggsave(p,file="/users/radivot/igv/race.wmf")
+# ggsave(p,file="~/race.eps")
 # ggsave(p,file="/users/radivot/case/grants/sachs/HSCepi/figs/race.png") 
 #####################   END Figure 4
 
@@ -342,7 +350,8 @@ pop$Years=cut(pop$popyear,breaks=c(1972,1977,1982,1987,1992,1999,2004,2012),labe
 head(pop,20)
 
 d=dbGetQuery(con, 
-"SELECT * from lymyleuk where race=1 and histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where race=1 and cancer='CML' and seqnum<2 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and histo3=9863 and seqnum<2 and agerec>5 and agerec<19")
 # "SELECT * from lymyleuk where race=1 and ICD9=2051 and seqnum<2 and agerec>5 and agerec<19")
 head(d)
 d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))
@@ -391,7 +400,8 @@ pop<-ddply(pop,.(popage,popsex,Years),summarise,py=sum(py))
 head(pop,20)
 
 d=dbGetQuery(con, 
-"SELECT * from lymyleuk where race=1 and histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where race=1 and cancer='CML' and seqnum<2 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where race=1 and histo3=9863 and seqnum<2 and agerec>5 and agerec<19")
 # "SELECT * from lymyleuk where race=1 and ICD9=2051 and seqnum<2 and agerec>5 and agerec<19")
 d<-ddply(d, .(agerec,sex,yrdx), summarise,cases=length(agerec))
 d$Years=cut(d$yrdx,breaks=c(1999,2001,2003,2005,2007,2013),labels=yearS)
@@ -424,8 +434,9 @@ for (Y in yearS) {
 dfk18=data.frame(years,k,kL,kU,Registries="SEER18")
 dfk=rbind(dfk9,dfk18)
 
-quartz(height=7,width=8)  # set back to square
-# windows(height=7,width=8,xpos=-100,ypos=-100)  # set back to square
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=9,height=7)
 library(ggplot2)
 pd <- position_dodge(1) 
 (p=ggplot(dfk, aes(x=years, y=k,shape=Registries)) + 
@@ -485,8 +496,8 @@ library(ggplot2)
 ##############################
 con=dbConnect(m,dbname=file.path(.seerHome,"00/all.db"))
 d=dbGetQuery(con, 
-"SELECT * from lymyleuk where histo2=9863 and seqnum<2 and agerec>5 and agerec<19")
-"SELECT * from lymyleuk where histo3=9876 and seqnum<2 and agerec>5 and agerec<19")
+"SELECT * from lymyleuk where cancer='CML' and seqnum<2 and agerec>5 and agerec<19")
+# "SELECT * from lymyleuk where histo3=9863 and seqnum<2 and agerec>5 and agerec<19")
 (d<-ddply(d, .(agerec,sex), summarise,cases=length(agerec))) 
 pops=dbGetQuery(con, "SELECT * from pops where popyear>2000 and popage>5 and popage<19")
 (pop<-ddply(pops, .(popage,popsex), summarise,py=sum(population)))

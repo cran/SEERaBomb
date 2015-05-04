@@ -1,5 +1,6 @@
 library(SEERaBomb)
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
 windows(width=10,height=5)
 par(mfrow=c(1,2),mar=c(4.3,2,.2,1.2),oma=c(0,0,2,0),cex=1.2,cex.lab=1.2,cex.axis=1.1)
 d=Sigurdson[Sigurdson$age>20,]

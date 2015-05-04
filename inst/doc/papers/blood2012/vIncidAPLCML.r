@@ -12,13 +12,17 @@ fexp<-function(p,dat,fitEXP)	{	c0=p[1];k=p[2];
 				-sum(cases*log(mn) - mn)})	}
 
 load("~/data/SEER/73/lymyleuk.RData") # this loads in DF
-morphCodes=c(CML=9863,APL=9866)
+# morphCodes=c(CML=9863,APL=9866)
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
-graphics.off(); windows(width=8,height=8,xpos=-150)
-par(mfrow=c(2,2),mar=c(4.7,0,2.3,0),oma=c(0,6,0,0),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+graphics.off();
+windows(width=8,height=8)
+par(mfrow=c(2,2),mar=c(4.7,0,2.3,0),oma=c(4.4,6,0.4,0.4),lwd=3,cex.lab=1.8,cex.axis=1.7,cex.main=1.8)
 for (fitEXP in c(TRUE,FALSE))
-	for (i in names(morphCodes)) {
-		d=DF[(DF$histo2==morphCodes[i])&(DF$numprims==1)&(DF$yrdx<2009),]
+# 	for (i in names(morphCodes)) {
+	for (i in c("CML","APL")) {
+		d=DF[(DF$cancer==i)&(DF$numprims==1)&(DF$yrdx<2009),]
+# 		d=DF[(DF$histo3==morphCodes[i])&(DF$numprims==1)&(DF$yrdx<2009),]
 		m=hist(d$agerec[d$sex==1],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 		f=hist(d$agerec[d$sex==2],breaks=c(seq(-.5,17.5,1),100),plot=FALSE)$counts
 		age=c(0.5,3,seq(7.5,87.5,5))

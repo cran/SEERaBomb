@@ -33,7 +33,9 @@ summary(as.factor(nd$surv))
 
 library(survival)
 graphics.off()
-windows(height=5,width=9,xpos=-100,ypos=-100) #need to control the device size to
+if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+windows(width=9,height=5)
 par(mfrow=c(1,2),mar=c(4.5,4.1,1,1),cex=1.4,lwd=1.5)
 rb=c("blue","red") #males blue, femals red 
 bbr=c("black","blue","red") #males blue, femals red 

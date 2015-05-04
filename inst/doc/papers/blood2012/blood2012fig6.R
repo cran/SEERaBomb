@@ -21,6 +21,8 @@ brb=c("blue","red","black")
 pchs=c(2,1,22)
 graphics.off()
 if(length(grep("linux",R.Version()$os))) windows <- function( ... ) X11( ... )
+if(length(grep("darwin",R.Version()$os))) windows <- function( ... ) quartz( ... )
+
 windows(width=6,height=6)
 par(mfrow=c(1,1),mar=c(4.7,5.4,1.3,.8))
 matplot(t(AGEtw),t(incid),log="y",type='b',ylab=expression(paste("Cases per ",10^5," Person-Years")),
