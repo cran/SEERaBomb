@@ -1,7 +1,16 @@
 useDynLib(SEERaBomb)
-import(LaF,RSQLite,dplyr,rgl,XLConnect)
+import(dplyr)  ## depends
+import(ggplot2)  ## depends
+import(LaF,RSQLite,rgl,XLConnect) ## needed less critically but for too many functions to list
 importFrom(Rcpp, evalCpp)
 importFrom(DBI, dbDriver)
 importFrom(mgcv, gam,s,ti)
-importFrom(reshape2, melt, acast)
+importFrom(plyr, ldply)
+importFrom(reshape2, melt, acast,dcast)
+importFrom(scales, comma_format)
+importFrom("stats", "D", "median", "qchisq", "qt", "rexp", "rpois", "runif", "var", "weighted.mean")
+importFrom("utils", "data", "head", "read.csv", "tail")
 exportPattern("^[[:alpha:]]+")
+##S3method(autoplot,seerSet)
+S3method(summary,seerSet)
+S3method(print,seerSet.summary)

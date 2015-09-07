@@ -1,16 +1,23 @@
-mkExcel=function(seerSet,tsdn,outDir="~/Results",txt=NULL,flip=FALSE) {
-  if (is.null(seerSet$L)) stop("seerSet L field is empty. Please run tsd on your seerSet object!") else L=seerSet$L[[tsdn]]
+mkExcel=function(seerSet,tsdn,outDir="~/Results",outName=NULL,flip=FALSE) {
+  if (length(tsdn)>1) {
+    cat("collapsing brks vector to a tsdn string\n") 
+    tsdn=paste0("b",paste(tsdn,collapse="_"))
+  }
+  if (is.null(seerSet$L)) stop("seerSet L field is empty. Please run tsd on your seerSet object!") else 
+    L=seerSet$L[[tsdn]]
   if (!dir.exists(outDir)) dir.create(outDir,recursive=T)
-  unlink(f<-paste0(outDir,"/",seerSet$bfn,tsdn,txt,ifelse(flip,"F",""),".xlsx"))
+  unlink(f<-paste0(outDir,"/",ifelse(is.null(outName),paste0(seerSet$bfn,tsdn),outName),ifelse(flip,"Flipped",""),".xlsx"))
   wb <- loadWorkbook(f,create=T) 
-   OL=NULL
-  intvs=names(L[[1]][["Obs"]]) 
-#   picks=rownames(L[["noRad"]][["Obs"]][[intvs[1]]])
-  for (icanc in seerSet$cancerS) {
+  OL=NULL
+  intvs=names(L[[L$trtS[1]]][["Obs"]]) 
+  #   picks=rownames(L[["noRad"]][["Obs"]][[intvs[1]]])
+  sheetS=L$firstS
+  if (flip) sheetS=seerSet$secondS
+  for (icanc in sheetS) {
     #    icanc="prostate"
     createSheet(wb, name = icanc)
     M=NULL
-    for (R in names(L)) {
+    for (R in L$trtS) {
       D=NULL
       for (intv in intvs) {
         if (flip) {
@@ -20,10 +27,10 @@ mkExcel=function(seerSet,tsdn,outDir="~/Results",txt=NULL,flip=FALSE) {
           O=L[[R]][["Obs"]][[intv]][icanc,,drop=FALSE]
           E=L[[R]][["Exp"]][[intv]][icanc,,drop=FALSE]
         }
-        print(O)
-        print(E)
+        #         print(O)
+        #         print(E)
         RR=O/E
-        print(RR)
+        #         print(RR)
         LL=qchisq(.025,2*O) /(2*E)
         UL=qchisq(.975,2*O+2)/(2*E)
         if (flip) col=as.data.frame(round(cbind(RR,LL,UL,O=O,E=E),2)) else
@@ -38,13 +45,15 @@ mkExcel=function(seerSet,tsdn,outDir="~/Results",txt=NULL,flip=FALSE) {
       M=cbind(M,D)
     } #rad
     #     writeWorksheet(wb, data.frame("second cancer"=picks,M), sheet = icanc,rownames=1)
-    if (flip) writeWorksheet(wb, cbind("1st cancer"=seerSet$cancerS,M), sheet = icanc,rownames=1) else
-              writeWorksheet(wb, cbind("2nd cancer"=seerSet$cancerS,M), sheet = icanc,rownames=1)
-     OL[[icanc]]=M
+    if (flip) writeWorksheet(wb, cbind("1st cancer"=L$firstS,M), sheet = icanc,rownames=1) else
+      writeWorksheet(wb, cbind("2nd cancer"=seerSet$secondS,M), sheet = icanc,rownames=1)
+    OL[[icanc]]=M
     setColumnWidth(wb,sheet = icanc, column = 1, width = 2500)
     for (j in 2:(dim(M)[2]+1)) setColumnWidth(wb,sheet = icanc, column = j, width = 4700)
     #     for (j in 1:(dim(M)[2]+1)) setColumnWidth(wb,sheet = icanc, column = j, width = 5600)
+    createFreezePane(wb,sheet = icanc,2,2) 
   } #icanc
-    saveWorkbook(wb)
-    invisible(OL)
+  saveWorkbook(wb)
+  cat("Workbook was written to",f,"\n")
+  invisible(OL)
 }
