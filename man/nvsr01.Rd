@@ -3,7 +3,7 @@
 \docType{data}
 \title{National Vital Statistic Report (nvsr01) Data}
 \description{
-  US mortality rates (probability of death that year) in 2001 (Report 52_14)   
+  US mortality rates (probability of death that year) in 2001 (Report 52_14).   
 }
 \usage{
 nvsr01
@@ -11,7 +11,7 @@ nvsr01
 \format{
   A data frame with the following columns.
   \describe{
-    \item{\code{age}}{Sigle-year resolution ages up to 99.5. }
+    \item{\code{age}}{Single-year resolution ages up to 99.5. }
     \item{\code{p}}{Pooled sexes and races. }
     \item{\code{pm}}{Pooled races, males. }
     \item{\code{pf}}{Pooled races, females. }

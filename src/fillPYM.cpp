@@ -2,14 +2,15 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-NumericMatrix fillPYM(SEXP PY, SEXP PYM) {
-  NumericMatrix PY1(PY);
+NumericMatrix fillPYM(SEXP PYin, SEXP PYM) {
+  NumericMatrix PY1(PYin);
   NumericMatrix PYM1(PYM);
   int nrows = PY1.nrow(),nages = PYM1.nrow(),nyears = PYM1.ncol(), quo,strtYrIndx,strtAgeIndx;
   double rem, pystrip, pre,age;
   for (int i = 0; i < nrows ; i++) {
     age=PY1(i,1);
     pre=ceil(age)-age;
+    if (pre==0) pre=1;
     pystrip=PY1(i,0);
     if (pystrip>pre) {
       pystrip=pystrip-pre; 

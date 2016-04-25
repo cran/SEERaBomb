@@ -1,13 +1,15 @@
 pickFields<-function(sas,picks=c("casenum","reg","race","sex","agedx","yrbrth",
-                                 "seqnum","modx","yrdx","histo3","radiatn","recno",
-                                 "agerec","ICD9","numprims","COD","surv") ){
+                                 "seqnum","modx","yrdx","histo3","radiatn", #"recno","agerec",
+                                 "ICD9",#"numprims",
+                                 "COD","surv") ){
   #sas = df 
   notRows=setdiff(picks,sas$names)
   if (length(notRows)>0) stop(paste0("The following picks are not allowed: ",paste(notRows,collapse=", ")))
   ncols=dim(sas)[1] # in the SEER data files
   nBytesP1=sum(sas[ncols,1:2]) # number of bytes per cancer case in SEER, plus 1
   rownames(sas)<-sas$names
-   musts=c("reg","race","sex","agedx","histo3","radiatn","agerec","ICD9") # don't let the user not pick these
+   musts=c("reg","race","sex","agedx","histo3","radiatn","ICD9") # don't let the user not pick these
+   # musts=c("reg","race","sex","agedx","histo3","radiatn","agerec","ICD9") # don't let the user not pick these
   missing=setdiff(musts,picks)
   if (!all(musts%in%picks)) {cat("In sas file order, picks must at least include:")
                              print(musts)
@@ -23,6 +25,7 @@ pickFields<-function(sas,picks=c("casenum","reg","race","sex","agedx","yrbrth",
   if("ICD10" %in% sas$names) sas["ICD10","type"]="string"
   if("eod13" %in% sas$names) sas["eod13","type"]="string"
   if("eod2" %in% sas$names) sas["eod2","type"]="string"
+  if("primsite" %in% sas$names) sas["primsite","type"]="string"
   if("plcbrthcntry" %in% sas$names) sas["plcbrthcntry","type"]="string"
   if("plcbrthstate" %in% sas$names) sas["plcbrthstate","type"]="string"
   if (picks[1]=="casenum") outdf=sas[1,,drop=F] else  

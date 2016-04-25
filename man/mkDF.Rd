@@ -1,7 +1,9 @@
 \name{mkDF}
 \alias{mkDF}
-\title{Convert seerSet to data.frame for gg-plotting}
-\description{Creates a data.frame of observed and expected cases for each first and second cancer and treatment. }
+\title{Converts seerSet$L series to a data.frame}
+\description{Creates a data.frame of observed and expected cases for each first and second cancer and treatment. 
+Use of this function is deprecated. Use getDF() instead, if needed: csd now calls getDF internally for the 
+most recent time series, so even it may not need to be called directly.}
 \usage{mkDF(seerSet,srs)} 
 \arguments{
   \item{seerSet}{seerSet object produced by tsd(). }
@@ -32,4 +34,4 @@ mkDF(pm)
 }
 }
 
-\keyword{IO}
+\keyword{internal}
