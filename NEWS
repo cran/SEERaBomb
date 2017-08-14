@@ -1,3 +1,19 @@
+CHANGES IN VERSION 2017.2 (Second version working with SEER data of 2017)
+------------------------
+
+NEW FEATURES
+
+    o mkDemographics is a new function that generates median age and OS tables in an Excel file     
+
+Notes
+
+    o There is now an ASCII version of the SEER data with radiatn and chemo as rightmost columns, so please ignore
+    my Notes below. I  assume users of SEERaBomb will get this "CUSTOM"  dataset by filling out the  data use
+    agreement: radiatn and chemo are now default fields in pickFields.
+
+
+
+
 CHANGES IN VERSION 2017.1 (First version working with SEER data of 2017)
 ------------------------
 
