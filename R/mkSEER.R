@@ -1,55 +1,82 @@
 mkSEER<-function(df,seerHome="~/data/SEER",outDir="mrgd",outFile="cancDef",
                  indices = list(c("sex","race"), c("histo3","seqnum"),  "ICD9"),
                  writePops=TRUE,writeRData=TRUE,writeDB=FALSE){
-  #   require(dplyr); require(LaF); seerHome="~/data/SEER"
-  #   outDir="mrgd";outFile="cancDef";writePops=T;writeRData=TRUE;writeDB=TRUE  # for debugging
-  #   indices = list(c("sex","race"), "histo2", "histo3", "ICD9")
+  # require(dplyr); require(LaF); seerHome="~/data/SEER"
+  # outDir="mrgd";outFile="cancDef";writePops=T;writeRData=TRUE;writeDB=TRUE  # for debugging
+  # indices = list(c("sex","race"), "histo2", "histo3", "ICD9")
   
   # gimic to get rid of unwanted notes in R CMD check
-  db=reg=race=sex=age=agerec=year=py=agedx=age19=age86=NULL
-#   
-#   mkPopsae=function(popsa) {
-# #     data(stdUS) #load us 2000 standard population up to 99+ and use it for the extrapolation
-#     props=SEERaBomb::stdUS$prop[86:100] #get rid of check Note by directly getting stdUS
-#     props=props/sum(props)
-#     elders=popsa%>%filter(age86==90)%>%group_by(db,reg,race,sex,year) 
-#     #      head(elders,2)
-#     #      head(popsa,2)
-#     grow=function(x) data.frame(x,age=85.5:99.5,PY=x$py*props) 
-#     elders=elders%>%do_(~grow(.))%>%select(-age86,-py) # no note on check about .
-# #     elders=elders%>%do(grow(.))%>%select(-age86,-py) # => Note on check about .
-#     nms=names(elders)
-#     names(elders)[which(nms=="PY")]<-c("py")
-#     nelders=popsa%>%filter(age86<90)
-#     nms=names(nelders)
-#     names(nelders)[which(nms=="age86")]<-c("age")
-#     elders=elders[,names(nelders)] # reorder columns to match
-#     rbind(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
-#   }
-
-mkPopsae=function(popsa) { # this replaces the version above it
-  rates=SEERaBomb::nvsr01[86:100,] #get rid of check Note by directly getting nvsr
-  props=cumprod(1-rates[,c("pm","pf")])
-  tots=cumsum(props)["100",]
-  for (i in 1:dim(props)[2]) props[,i]=props[,i]/tots[,i]
-  elders=popsa%>%filter(age86==90)%>%group_by(db,reg,race,sex,year) 
-  grow=function(x) {if (x$sex=="male") y=data.frame(x,age=85.5:99.5,PY=x$py*props$pm) else
-    y=data.frame(x,age=85.5:99.5,PY=x$py*props$pf)
-    y
+  db=reg=race=sex=age=agerec=year=py=agedx=age19=age86=histo3=yrdx=NULL
+  #   
+  #   mkPopsae=function(popsa) {
+  # #     data(stdUS) #load us 2000 standard population up to 99+ and use it for the extrapolation
+  #     props=SEERaBomb::stdUS$prop[86:100] #get rid of check Note by directly getting stdUS
+  #     props=props/sum(props)
+  #     elders=popsa%>%filter(age86==90)%>%group_by(db,reg,race,sex,year) 
+  #     #      head(elders,2)
+  #     #      head(popsa,2)
+  #     grow=function(x) data.frame(x,age=85.5:99.5,PY=x$py*props) 
+  #     elders=elders%>%do_(~grow(.))%>%select(-age86,-py) # no note on check about .
+  # #     elders=elders%>%do(grow(.))%>%select(-age86,-py) # => Note on check about .
+  #     nms=names(elders)
+  #     names(elders)[which(nms=="PY")]<-c("py")
+  #     nelders=popsa%>%filter(age86<90)
+  #     nms=names(nelders)
+  #     names(nelders)[which(nms=="age86")]<-c("age")
+  #     elders=elders[,names(nelders)] # reorder columns to match
+  #     rbind(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
+  #   }
+  tMDSrepair=function(canc) {
+    yearEnd=range(canc$yrdx)[2]
+    sc=canc%>%filter(histo3==9920|histo3==9987) #tAML and tMDS  subset of cancs (sc)
+    d=sc%>%filter(yrdx>2000)%>%group_by(sex,yrdx,histo3)%>%summarize(cnt=n()) #count rows in sex-year-ICDO3 groups
+    m=lm(cnt~yrdx,subset(d,histo3==9920&yrdx<2010&sex=="Male"))
+    f=lm(cnt~yrdx,subset(d,histo3==9920&yrdx<2010&sex=="Female"))
+    nd=list(yrdx=2010:yearEnd)
+    dm=d%>%filter(yrdx>=2010&histo3==9920,sex=="Male")
+    df=d%>%filter(yrdx>=2010&histo3==9920,sex=="Female")
+    (xm=dm$cnt-round(predict(m,nd))) # numbers of male tAMLs that need to become tMDSs in 2010 and higher
+    (xf=df$cnt-round(predict(f,nd))) # same for females
+    canc$id=1:dim(canc)[1]  # set up an id column to use to pull the random sample
+    set.seed(8675309)   # Call Jenny to make it reproducible. 
+    rws=NULL
+    for (i in 1:length(xm)){
+      rws=c(rws,sample((canc%>%filter(histo3==9920&sex=="Male"&yrdx==(2009+i)))$id,xm[i]))
+      rws=c(rws,sample((canc%>%filter(histo3==9920&sex=="Female"&yrdx==(2009+i)))$id,xf[i]))
+    } 
+    canc[rws,"cancer"]="MDS" # note that we don't need tMDS and tAML as separate cancer types
+    canc[rws,"histo3"]=9987 
+    canc$histo3=as.integer(canc$histo3)
+    canc$id=NULL
+    canc
   }
-  elders=elders%>%do_(~grow(.))%>%select(-age86,-py) # no note on check about .
-  nms=names(elders)
-  names(elders)[which(nms=="PY")]<-c("py")
-  nelders=popsa%>%filter(age86<90)
-  nms=names(nelders)
-  names(nelders)[which(nms=="age86")]<-c("age")
-  elders=elders[,names(nelders)] # reorder columns to match
-  # rbind(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
-  bind_rows(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
-}
-
-#  mkPopsae(popsa) # for testing
-
+  
+  
+  
+  
+  mkPopsae=function(popsa) { # this replaces the version above it
+    rates=SEERaBomb::nvsr01[86:100,] #get rid of check Note by directly getting nvsr
+    props=cumprod(1-rates[,c("pm","pf")])
+    tots=cumsum(props)["100",]
+    for (i in 1:dim(props)[2]) props[,i]=props[,i]/tots[,i]
+    elders=popsa%>%filter(age86==90)%>%group_by(db,reg,race,sex,year) 
+    grow=function(x) {if (x$sex=="male") y=data.frame(x,age=85.5:99.5,PY=x$py*props$pm) else
+      y=data.frame(x,age=85.5:99.5,PY=x$py*props$pf)
+    y
+    }
+    elders=elders%>%do_(~grow(.))%>%select(-age86,-py) # no note on check about .
+    nms=names(elders)
+    names(elders)[which(nms=="PY")]<-c("py")
+    nelders=popsa%>%filter(age86<90)
+    nms=names(nelders)
+    names(nelders)[which(nms=="age86")]<-c("age")
+    elders=elders[,names(nelders)] # reorder columns to match
+    # rbind(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
+    bind_rows(nelders,elders) # this now becomes popsa extended (i.e. popsae) 
+  }
+  
+  #  mkPopsae(popsa) # for testing
+  
   seerHome=path.expand(seerHome)
   outD=file.path(seerHome,outDir) 
   outF=file.path(seerHome,outDir,paste0(outFile,".RData")) 
@@ -72,9 +99,9 @@ mkPopsae=function(popsa) { # this replaces the version above it
     popsaL=vector(mode="list",3)
     ii=1
     for (i in dirs) {
-#       f=file.path(i,"19agegroups.txt") 
-#       laf<-laf_open_fwf(f,column_types=colTypes,column_widths=colWidths,column_names = colNames1)
-#       popgaL[[ii]]=tbl_df(laf[,colNames1[-c(2,5)]] )
+      #       f=file.path(i,"19agegroups.txt") 
+      #       laf<-laf_open_fwf(f,column_types=colTypes,column_widths=colWidths,column_names = colNames1)
+      #       popgaL[[ii]]=tbl_df(laf[,colNames1[-c(2,5)]] )
       
       f=file.path(i,"singleages.txt") 
       laf<-laf_open_fwf(f,column_types=colTypes,column_widths=colWidths,column_names = colNames2)
@@ -93,26 +120,26 @@ mkPopsae=function(popsa) { # this replaces the version above it
     # popga$reg=as.integer(popga$reg+1500)
     popsa$reg=as.integer(popsa$reg+1500)
     
-#     popga=popga%>%
-#       mutate(race=cut(race,labels=c("white","black","other"),breaks=c(1,2,3,100), right=F))  %>%
-#       mutate(db=cut(reg,labels=c("73","92","00"),breaks=c(1500,1528,1540,1550), right=F))  %>%
-#       mutate(reg=mapRegs(reg)) %>%
-#       mutate(age19=c(0.5,3,seq(7.5,82.5,5),90)[age19+1]) %>%
-#       mutate(sex=factor(sex,labels=c("male","female"))) %>%
-#       group_by(db,reg,race,sex,age19,year) %>%
-#       #       summarise(py=sum(py))%>%   #summing here  over counties and hispanic origin or not, which are in popga as rows but not as columns
-#       #       group_by(add=F) # clear grouping
-#       summarise(py=sum(py))
-#     popga=as.data.frame(popga) # clears everything, down to the data.frame
+    #     popga=popga%>%
+    #       mutate(race=cut(race,labels=c("white","black","other"),breaks=c(1,2,3,100), right=F))  %>%
+    #       mutate(db=cut(reg,labels=c("73","92","00"),breaks=c(1500,1528,1540,1550), right=F))  %>%
+    #       mutate(reg=mapRegs(reg)) %>%
+    #       mutate(age19=c(0.5,3,seq(7.5,82.5,5),90)[age19+1]) %>%
+    #       mutate(sex=factor(sex,labels=c("male","female"))) %>%
+    #       group_by(db,reg,race,sex,age19,year) %>%
+    #       #       summarise(py=sum(py))%>%   #summing here  over counties and hispanic origin or not, which are in popga as rows but not as columns
+    #       #       group_by(add=F) # clear grouping
+    #       summarise(py=sum(py))
+    #     popga=as.data.frame(popga) # clears everything, down to the data.frame
     
     #     class(popga)
     
     popsa=popsa%>%    # note: here age groups indices 0-18 are replaced by actual ages 1-85, so no need to remap
-      mutate(race=cut(race,labels=c("white","black","other"),breaks=c(1,2,3,100), right=F))  %>%
+      mutate(race=cut(race,labels=c("White","Black","Other"),breaks=c(1,2,3,100), right=F))  %>%
       mutate(db=cut(reg,labels=c("73","92","00"),breaks=c(1500,1528,1540,1550), right=F))  %>%
       mutate(reg=mapRegs(reg)) %>%    
       mutate(age86=age86+0.5) %>%    
-      mutate(sex=factor(sex,labels=c("male","female"))) %>%
+      mutate(sex=factor(sex,labels=c("Male","Female"))) %>%
       group_by(db,reg,race,sex,age86,year) %>%
       #       summarise(py=sum(py))%>%   #summing here  over counties and hispanic origin or not, which are in popga as rows but not as columns
       #       group_by(add=F) # clear grouping
@@ -154,16 +181,19 @@ mkPopsae=function(popsa) { # this replaces the version above it
     
     canc=canc%>%
       filter(agedx<200)%>%
-      mutate(race=cut(race,labels=c("white","black","other"),breaks=c(1,2,3,100), right=F))  %>%
+      mutate(race=cut(race,labels=c("White","Black","Other"),breaks=c(1,2,3,100), right=F))  %>%
       mutate(db=cut(reg,labels=c("73","92","00"),breaks=c(1500,1528,1540,1550), right=F))  %>%
       mutate(reg=mapRegs(reg)) %>%
       # mutate(age19=c(0.5,3,seq(7.5,82.5,5),90)[agerec+1]) %>%
       mutate(age86=as.numeric(as.character(cut(agedx,c(0:85,150),right=F,labels=c(0.5:85,90)))))%>%
       #       select(-agerec)%>%
-      mutate(sex=factor(sex,labels=c("male","female")))
+      mutate(sex=factor(sex,labels=c("Male","Female")))
     canc=mapCancs(canc)
+    canc=mapCODs(canc)
     # if ("radiatn"%in%names(canc)) canc=mapTrts(canc)
     canc=mapTrts(canc)
+    canc=tMDSrepair(canc)
+    canc[canc$surv==9999,"surv"]=NA #set missing to NA to simplify survival codes
     delT=proc.time() - ptm  
     cat("Cancer files were processed in ",delT[3]," seconds.\n")
   } #if writeRData or writeDB
@@ -194,6 +224,10 @@ mkPopsae=function(popsa) { # this replaces the version above it
   if (writeRData) {
     print("save()-ing DF canc to disk")
     canc=tbl_df(canc)
+    L=as.list(df$desc)
+    names(L)=df$names
+    L=L[df$names!=" "]
+    labelled::var_label(canc) <- L
     save(canc,file=outF)
     cat("Cancer data has been written to: ",outF,"\n")
   }
@@ -202,6 +236,9 @@ mkPopsae=function(popsa) { # this replaces the version above it
     # popga=tbl_df(popga)
     popsa=tbl_df(popsa)
     popsae=tbl_df(popsae)
+    labelled::var_label(popsa)[2:7] <- c("SEER Registry","Race/ethnicity","Sex","Age at diagnosis","Year of diagnosis","Person years")
+    labelled::var_label(popsae)[2:7] <- c("SEER Registry","Race/ethnicity","Sex","Age at diagnosis","Year of diagnosis","Person years")
+    # "db"   "reg"  "race" "sex"  "age"  "year" "py" 
     # save(popga,file=file.path(outD,"popga.RData"))  
     save(popsa,file=file.path(outD,"popsa.RData"))  
     save(popsae,file=file.path(outD,"popsae.RData"))  

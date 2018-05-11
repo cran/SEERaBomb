@@ -1,3 +1,45 @@
+CHANGES IN VERSION 2018.1 (First version as of SEER release of April 2018)
+------------------------
+
+NEW FEATURES
+
+    o csd() now gets second cancer factor level order from seerSet$sec and moves years in t by 0.1 for each sec level
+    to separate error bars in plots.
+
+    o mkAbomb now sorts cols into blocks: 1) grouping; 2) PY-weighted means; and 3) sums. DG ends the 1st
+    and py starts the last. Cols ending in G are SEERaBomb group defaults. New t is time since bombing (yrs)
+    
+    o incidAbomb takes a grouped A-bomb tibble with DG and py, and forms means, sums, and incidences.
+
+    o incidSEER converts canc and popsae into a data frame with py and cases, filtering years on cancers
+    that had not yet started in SEER. 
+
+    o mkSEER now automatically maps tAML 9920's into tMDS 9987's post 2009. All 9987 cases after 2009
+    are  ones that were mapped over, so users can undo this if they wish, but I think its best to leave it. 
+    Values of 9999=missing in canc$surv are now set to missing in mkSEER().
+
+    o pickFields now sorts picks internally, so the user no longer needs to worry about pick ordering.
+
+
+
+CHANGES IN VERSION 2017.3 (Third version working with SEER data of 2017)
+------------------------
+
+NEW FEATURES
+
+    o desc field of getFields() is now var_label() in mkSEER() output (depends on R package labelled)
+    o added sas names to output of getFields and pickField
+    o shifted dependence from XLConnect to openxlsx to get rid of rJava dependence  
+    o mapCODs  maps COD integer codes to strings in CODS     
+    o p2s generates times between primary/first and second cancers, at the individual level     
+
+
+Notes
+
+    o Fixed riskVsAge() so it no longer depends on trt being "rad" and "noRad" 
+
+
+
 CHANGES IN VERSION 2017.2 (Second version working with SEER data of 2017)
 ------------------------
 

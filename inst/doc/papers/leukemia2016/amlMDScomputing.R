@@ -3,11 +3,11 @@ rm(list=ls())
 library(SEERaBomb)
 library(dplyr)  #the %>% operators below come from here
 # the following was made earlier using SEERaBomb's mkSEER
-load("~/data/SEER13/mrgd/cancDef.RData") #loads in canc
+load("~/data/SEER/mrgd/cancDef.RData") #loads in canc
 canc=canc%>%filter(cancer!="benign")
-load("~/data/SEER13/mrgd/popsae.RData") # loads in popsae (extended to ages 85-99)
+load("~/data/SEER/mrgd/popsae.RData") # loads in popsae (extended to ages 85-99)
 # trim down columns to bare neccesities needed for this paper. 
-canc=canc%>%select(-reg,-COD,-radiatn,-histo3,-ICD9)
+canc=canc%>%select(-reg,-COD,-histo3,-ICD9)
 # canc=canc%>%select(-reg,-recno,-agerec,-numprims,-COD,-age19,-radiatn,-histo3,-ICD9)
 popsa=popsae%>%group_by(db,race,sex,age,year)%>%summarize(py=sum(py)) # sum on regs
 head(canc,1)
@@ -19,9 +19,16 @@ canc$cancer[canc$cancer=="APL"] ="AML" # overwrite back to AML
 canc$cancer[canc$cancer=="AMLti"] ="AML" # overwrite back to AML
 canc$cancer=factor(canc$cancer)#eliminate extra levels: this happens in seerSet() too so not critical
 levels(canc$cancer)
+head(canc,2)
+levels(canc$trt)
+library(tidyverse)
+library(magrittr)
+canc%<>%separate(trt,c("trt","trtc"))
+head(canc,2)
+canc$trt=factor(canc$trt)
 
-pm=seerSet(canc,popsa,Sex="male",ageStart=0,ageEnd=100) #pooled (races) male seerSet
-pf=seerSet(canc,popsa,Sex="female",ageStart=0,ageEnd=100) #pooled (races) female seerSet
+pm=seerSet(canc,popsa,Sex="Male",ageStart=0,ageEnd=100) #pooled (races) male seerSet
+pf=seerSet(canc,popsa,Sex="Female",ageStart=0,ageEnd=100) #pooled (races) female seerSet
 pm=mk2D(pm,secondS=c("AML","MDS")) # 4 secs
 pf=mk2D(pf,secondS=c("AML","MDS"))# list object pf goes in and also comes out, with more on it
 # comparing objects, note that mk2D added the dataframe D (for 2D plotting) to the object 
@@ -71,8 +78,8 @@ system.time(save(pf,file="~/Results/amlMDS/pf.RData"))
 ######### START get SEER9 time courses for the left panel of Figure S5 
 canc9=canc%>%filter(db=="73")  
 popsa9=popsa%>%filter(db=="73")
-(pm9=seerSet(canc9,popsa9,Sex="male",ageStart=0,ageEnd=100)) #pooled (races) male seerSet
-(pf9=seerSet(canc9,popsa9,Sex="female",ageStart=0,ageEnd=100)) #pooled (races) female seerSet
+(pm9=seerSet(canc9,popsa9,Sex="Male",ageStart=0,ageEnd=100)) #pooled (races) male seerSet
+(pf9=seerSet(canc9,popsa9,Sex="Female",ageStart=0,ageEnd=100)) #pooled (races) female seerSet
 pm9=mk2D(pm9,secondS=c("AML","MDS")) # 3 secs, was 170 secs with all cancerS
 pf9=mk2D(pf9,secondS=c("AML","MDS"))
 # plot2D(pm9,write=F)  
@@ -85,8 +92,8 @@ system.time(save(pf9,file="~/Results/amlMDS/pf9.RData"))
 ################### END computing RR, O, E and PY for SEER9 for right panel of Fig S5. 
 
 # the next chunk is to validate the codes via Table 1
-pm20=seerSet(canc9,popsa9,Sex="male",ageStart=20,ageEnd=85) #pooled (races) male seerSet
-pf20=seerSet(canc9,popsa9,Sex="female",ageStart=20,ageEnd=85) #pooled (races) female seerSet
+pm20=seerSet(canc9,popsa9,Sex="Male",ageStart=20,ageEnd=85) #pooled (races) male seerSet
+pf20=seerSet(canc9,popsa9,Sex="Female",ageStart=20,ageEnd=85) #pooled (races) female seerSet
 pm20=mk2D(pm20) # 55 secs (goes through all second cancers by default)
 pf20=mk2D(pf20) #
 pm20=tsd(pm20,brks=c(5)) 
