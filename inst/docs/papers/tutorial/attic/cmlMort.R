@@ -1,5 +1,5 @@
 graphics.off();rm(list=ls())
-library(SEERaBomb)
+library(SEERaBomb)#version 2018.1 or higher is needed for this tutorial
 load("~/data/SEER/mrgd/cancDef.RData")
 d=canc%>%filter(cancer=="CML")%>%print(n=13)
 d%>%summarize(n=n(),na=sum(is.na(surv)),prct=100*na/n)#<2% missing
@@ -10,7 +10,11 @@ load("~/data/usMort/mrt.RData")#loads mrt
 (g=qplot(x=t,y=RR,data=D,col=Years,geom=c("line","point"),facets=.~sex,
         xlab="Years Since CML Diagnosis",ylab="Relative Risk of Mortality"))
 (g=g+scale_x_continuous(breaks=seq(0,15,5)))
-(g=g+theme(legend.position="top",legend.title=element_blank()))
+library(ggsci);jco=scale_color_jco();tc=theme_classic(base_size=14)
+(g=g+jco+tc+theme(legend.position="top",legend.title=element_blank(),
+           strip.background=element_blank(),
+           legend.text=element_text(size=12),
+          strip.text=element_text(size=12)))
 (g=g+geom_abline(intercept=1,slope=0)+ylim(c(0,NA)))
 g+geom_errorbar(aes(ymin=rrL,ymax=rrU),width=.2)
 ggsave("~/Results/tutorial/CMLmortRR.pdf",width=4.5,height=3)
@@ -20,9 +24,11 @@ d=d%>%mutate(yrg=cut(yrdx,c(1972,1990,2005,2015),labels=labs))%>%print(n=13)
 library(survival);library(survminer)
 fit=survfit(Surv(surv,status)~yrg+sex,data=d) 
 ggsurvplot_facet(fit,d,facet.by=c("sex"),ylab="Survival Probability",
-                 xlab="Years Since CML Diagnosis",legend.title="",
-                 xlim=c(0,12),short.panel.labs=T)+
-  scale_x_continuous(breaks=seq(0,15,5))
+          xlab="Years Since CML Diagnosis",legend.title="",
+          xlim=c(0,12),short.panel.labs=T)+
+  scale_x_continuous(breaks=seq(0,15,5))+
+  jco+theme(strip.background=element_blank(),strip.text=element_text(size=12),
+            legend.text=element_text(size=12))
 ggsave("~/Results/tutorial/CMLsurvTrends.pdf",width=4.5,height=3)
 
 

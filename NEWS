@@ -1,3 +1,39 @@
+CHANGES IN VERSION 2019.1 (First version since SEER release of April 2019)
+------------------------
+
+Notes
+
+    o The SEER9 registries now all start in 1975. This caused problems since I had assumed that 
+    1973 would always be the starting year. If you want to use older SEER data that 
+    starts in 1973, please use a 2018 version of SEERaBomb. 
+    
+    o The three new registries (Idaho, Massachusetts and New York) do not seem to 
+    be present in the custom ASCII SEER data release.
+
+
+
+CHANGES IN VERSION 2018.3 (Third version since SEER release of April 2018)
+------------------------
+
+NEW FEATURES
+
+    o added mkMrtLocal() which makes mortality binaries from a local copy of the HMD data. This replaces mkMrt().
+    The R package demograhphy used by mkMrt() is thus no longer needed. Use this new function if mkMrt() gives you 
+    a password error, but you can get into HMD with your username and password (and thus know they work). Before 
+    running it download to your local drive (and unzip into your ~/data folder) at least one
+    of the two full HMD data file trees (organized by country at the top, the other by statistics at the top).  
+
+
+CHANGES IN VERSION 2018.2 (Second version since SEER release of April 2018)
+------------------------
+
+NEW FEATURES
+
+    o simulated survival simSurv().
+    o make life tables mkLT().
+
+
+
 CHANGES IN VERSION 2018.1 (First version as of SEER release of April 2018)
 ------------------------
 

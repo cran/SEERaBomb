@@ -2,7 +2,7 @@ mkAbomb<-function(AbombHome="~/data/abomb"){
   #   library(RSQLite)
   # gimic to get rid of unwanted notes in R CMD check
   marD=py=doseg=ovaD=tesD=uteD=g=NULL #seems to be OK with D and n coming from some global source: function names?
-  year=city=un4gy=ageG=DG=gdist=upy=subjects=NHL=tot=marg=marn=colD=histnos=NULL
+  year=city=un4gy=calg=ageG=DG=gdist=upy=subjects=NHL=tot=marg=marn=colD=histnos=NULL
 
   AbombHome=path.expand(AbombHome)
   outDB=file.path(AbombHome,"abomb.db") 
@@ -60,7 +60,7 @@ mkAbomb<-function(AbombHome="~/data/abomb"){
   names(L)=nms
   labelled::var_label(d) <- L
   # View(d)
-  d=d%>%select(city:un4gy,ageG:DG,gdist:year,D:t,py,upy,subjects,NHL:tot)
+  d=d%>%select(city:un4gy,calg,ageG:DG,gdist:year,D:t,py,upy,subjects,NHL:tot)
   # head(d,2)
   #     filter(doseg>1)  #this group has negative doses, which means they are unknown, so take them out. 
   #     filter(D>=0,py>0)%.% 
@@ -124,9 +124,9 @@ mkAbomb<-function(AbombHome="~/data/abomb"){
   # head(d,2)
   L=as.list(desc)
   names(L)=nms
-  labelled::var_label(d) <- L
+  # labelled::var_label(d) <- L
   # View(d)
-  d=d%>%select(city:un4gy,ageG:DG,gdist:year,colD:t,py,upy,subjects,solid:histnos)
+  d=d%>%select(city:un4gy,calg,ageG:DG,gdist:year,colD:t,py,upy,subjects,solid:histnos)
   # head(d,2)
   
   

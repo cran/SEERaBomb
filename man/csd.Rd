@@ -5,16 +5,16 @@
 times since diagnoses of a 1st cancer. 2D spline fits are used to produce 
 expected cases E controlling for background risk dedepence on 
 age and calendar year.  RR is then O/E where O is the number of observed cases. }
-\usage{csd(seerSet,brkst=c(0),brksy=c(1973),brksa=c(0),trts=NULL,
+\usage{csd(seerSet,brkst=c(0),brksy=c(1975),brksa=c(0),trts=NULL,
                     PYLong=FALSE,firstS="all",exclUnkSurv=FALSE) } % ,outDir="~/Results", txt=NULL)} 
 \arguments{
   \item{seerSet}{A seerSet object produced by mk2D().  }
   \item{brkst}{Vector of breaks in years used to form Time intervals/bins since diagnosis. 
   An upper limit of 100, well beyond 40 years of SEER follow up currently available, 
               is assumed/added to brkst internally, and should thus not be in brkst. }
-  \item{brksy}{Vector of breaks used to form groups of calendar Year at diagnosis intervals/bins.
+  \item{brksy}{Vector of breaks used to form groups of calendar Year at 1st cancer diagnosis intervals/bins.
                An upper limit of yearEnd (last year in SEER; a seerSet field) is assumed/added to brksy internally.}
-  \item{brksa}{Vector of breaks used to form groups of Age at diagnosis intervals/bins. An upper limit of 126 is assumed. }
+  \item{brksa}{Vector of breaks used to form groups of Age at 1st cancer diagnosis intervals/bins. An upper limit of 126 is assumed. }
   \item{trts}{Character vector of treatments of interest. Default of NULL => all levels in seerSet's canc$trt. }
   \item{PYLong}{Set true if in addition to O and E for each tsd interval you also want PY strips
              for each individual; having these big dataframes slows saving seerSets, so only fetch if needed.}
@@ -39,7 +39,7 @@ library(SEERaBomb)
 pm=simSeerSet()
 pm=mk2D(pm)
 pm$canc
-pm=csd(pm,brkst=c(0,5),brksy=c(1973,2000),brksa=c(0,50),trts=c("noRad","rad"))
+pm=csd(pm,brkst=c(0,5),brksy=c(1975,2000),brksa=c(0,50),trts=c("noRad","rad"))
 pm
 library(ggplot2)
 theme_set(theme_gray(base_size = 16)) 
